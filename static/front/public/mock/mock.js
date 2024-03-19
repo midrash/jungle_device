@@ -8,7 +8,16 @@ export const mock = Array.from({ length: 30 }, () => ({
 export const detailMock = {
   "user_id": null,
 	"user_name" :null,
-	"detail" : "long text",
+	"detail" : `# This is a H1
+	## This is a H2
+	### This is a H3
+	#### This is a H4
+	##### This is a H5
+	###### This is a H6
+	
+	asdf
+	asdf
+	asdfasd`,
 	"images" : [
 		"https://via.placeholder.com/200x140",
 		"https://via.placeholder.com/200x140",
