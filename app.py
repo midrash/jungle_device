@@ -23,6 +23,10 @@ def home():
 def page_signup():
   return render_template("signInPage.html", name="테스터")
 
+@app.route("/feed")
+def feed():
+  return render_template("feed.html", name="테스터")
+
 ## api
 # 회원가입
 @app.route("/api/signup", methods=["POST"])
