@@ -7,121 +7,108 @@ app = Flask(__name__, static_folder="static")
 client = MongoClient("localhost", 27017)
 db = client.jungle
 
+SECRET_KEY = 'jungle'
 
+## 주소
 # HTML 화면 보여주기
 @app.route("/")
 def home():
-	return render_template("index.html", name="테스터")
-
-# feed상세 화면 보여주기
-@app.route("/feed")
-def feed():
-	return render_template("feed.html",  name="테스터")
+  return render_template("index.html", name="테스터")
 
 # @app.route('/<name>')
 # def hello(name):
 #     return render_template('index.html', name=name)
 
-admin_id = "Minsu"
-admin_pw = "123456"
-SECRET_KEY = 'apple'
+@app.route("/signup")
+def page_signup():
+  return render_template("signInPage.html", name="테스터")
 
+## api
 # 회원가입
-@app.route("/signin", methods=["POST"])
-def signin_proc():
-	# 요청 내용 파싱
-	print(request.form)
-	input_data = request.form
-	user_id = input_data["user_id"]
-	user_password = input_data["user_password"]
-	user_name = input_data["user_name"]
+@app.route("/api/signup", methods=["POST"])
+def signup_proc():
+  # 요청 내용 파싱
+  print(request.form)
+  input_data = request.form
+  user_id = input_data["user_id"]
+  user_password = input_data["user_password"]
+  user_name = input_data["user_name"]
 
-	# 아이디 중복 조회
-	find_user = db.users.find_one({"user_id": user_id})
-	print(find_user)
+  # 아이디 중복 조회
+  find_user = db.users.find_one({"user_id": user_id})
+  print(find_user)
 
-	user = {"user_id": user_id, "user_password": user_password, "user_name": user_name}
-	# return jsonify({'result': 'success', 'user': user})
-	# 중복되는 아이디가 없을경우
-	if find_user == None:
-			print("중복 아이디 없음")
-			db.users.insert_one(user)
-			return jsonify({"result": "success", "message": "등록 완료"})
+  user = {"user_id": user_id, "user_password": user_password, "user_name": user_name}
+  # return jsonify({'result': 'success', 'user': user})
+  # 중복되는 아이디가 없을경우
+  if find_user == None:
+      print("중복 아이디 없음")
+      db.users.insert_one(user)
+      return jsonify({"result": "success", "message": "등록 완료"})
 
-	# 아이디, 비밀번호가 일치하지 않는 경우
-	else:
-			return jsonify({"result": "fail", "message": "아이디 중복됨"})
+  # 아이디, 비밀번호가 일치하지 않는 경우
+  else:
+      return jsonify({"result": "fail", "message": "아이디 중복됨"})
 
 
 # 로그인
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login_proc():
-	# 요청 내용 파싱
-	print(request.form)
-	input_data = request.form
-	user_id = input_data["user_id"]
-	user_password = input_data["user_password"]
+  # 요청 내용 파싱
+  print(request.form)
+  input_data = request.form
+  user_id = input_data["user_id"]
+  user_password = input_data["user_password"]
 
-	# 가입 여부 확인
-	find_user = db.users.find_one({"user_id": user_id})
-	print(find_user)
+  # 가입 여부 확인
+  find_user = db.users.find_one({"user_id": user_id})
+  print(find_user)
 
-	# 아이디, 비밀번호가 일치하는 경우
-	if (find_user == None): # 아이디 없음
-		print("미가입 아이디")
-		return jsonify({'result': 'fail','message':'미가입 아이디'})
-		# payload = {
-		# 	'id': user_id,
-		# 	'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
-		# }
-		# token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
-
-	elif (find_user['user_id'] == user_id and find_user['user_password'] == user_password):
-		
-		return jsonify({'result': 'success', 'message': '로그인 성공'})
-	# 아이디, 비밀번호가 일치하지 않는 경우
-	else:
-		return jsonify({'result': 'fail'})
-
-
-
-# # API 역할을 하는 부분
-# @app.route('/api/list', methods=['GET'])
-# def show_stars():
-#     # 1. db에서 mystar 목록 전체를 검색합니다. ID는 제외하고 like 가 많은 순으로 정렬합니다.
-#     # 참고) find({},{'_id':False}), sort()를 활용하면 굿!
-#     stars = list(db.mystar.find({}, {'_id': False}).sort('like', -1))
-#     # 2. 성공하면 success 메시지와 함께 stars_list 목록을 클라이언트에 전달합니다.
-#     return jsonify({'result': 'success', 'stars_list': stars})
+  # 미가입
+  if (find_user == None): 
+    print("미가입 아이디")
+    return jsonify({'result': 'fail','message':'미가입 아이디'})
+  # 아이디, 비밀번호가 일치하는 경우
+  elif (find_user['user_id'] == user_id and find_user['user_password'] == user_password):
+    payload = {
+      'user_id': user_id,
+      # 'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
+    }
+    # 토큰 생성
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return jsonify({'result': 'success', 'token': token})
+  # 아이디, 비밀번호가 일치하지 않는 경우
+  else:
+    return jsonify({'result': 'fail','message':'로그인 실패'})
 
 
-# @app.route('/api/like', methods=['POST'])
-# def like_star():
-#     # 1. 클라이언트가 전달한 name_give를 name_receive 변수에 넣습니다.
-#     name_receive = request.form['name_give']
 
-#     # 2. mystar 목록에서 find_one으로 name이 name_receive와 일치하는 star를 찾습니다.
-#     star = db.mystar.find_one({'name': name_receive})
-#     # 3. star의 like 에 1을 더해준 new_like 변수를 만듭니다.
-#     new_like = star['like'] + 1
-
-#     # 4. mystar 목록에서 name이 name_receive인 문서의 like 를 new_like로 변경합니다.
-#     # 참고: '$set' 활용하기!
-#     db.mystar.update_one({'name': name_receive}, {'$set': {'like': new_like}})
-
-#     # 5. 성공하면 success 메시지를 반환합니다.
-#     return jsonify({'result': 'success'})
+# API 역할을 하는 부분
+@app.route('/api/jwt/test', methods=['GET'])
+def jwtTest():
+  header = request.headers.get('Authorization')  # Authorization 헤더로 담음
+  # 토큰 검증 
+  token_result = tokenVerification(header)
+  
+  if token_result == False:
+    return jsonify({'result': 'false', 'message': "토큰 검증 실패"})
+  else:
+    return jsonify({'result': 'success', 'message': "토큰 검증 성공"})
 
 
-# @app.route('/api/delete', methods=['POST'])
-# def delete_star():
-#     # 1. 클라이언트가 전달한 name_give를 name_receive 변수에 넣습니다.
-#     name_receive = request.form['name_give']
-#     # 2. mystar 목록에서 delete_one으로 name이 name_receive와 일치하는 star를 제거합니다.
-#     db.mystar.delete_one({'name': name_receive})
-#     # 3. 성공하면 success 메시지를 반환합니다.
-#     return jsonify({'result': 'success'})
-
+def tokenVerification(token):
+  try:
+    # 토큰 디코딩
+    decoded_token = jwt.decode(token,SECRET_KEY,algorithms='HS256')
+    # 가입 여부 확인
+    find_user = db.users.find_one({"user_id": decoded_token['user_id']})
+    if find_user == None:
+      return False
+    else:
+      return True
+  except:
+    return False
 
 if __name__ == "__main__":
-	app.run("0.0.0.0", port=5001, debug=True)
+  app.run("0.0.0.0", port=5000, debug=True)
+
