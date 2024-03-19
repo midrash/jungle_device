@@ -61,22 +61,22 @@ def login_proc():
     find_user = db.users.find_one({"user_id": user_id})
     print(find_user)
 
-	# 아이디, 비밀번호가 일치하는 경우
-	if (find_user == None): # 아이디 없음
-		print("미가입 아이디")
-		return jsonify({'result': 'fail','message':'미가입 아이디'})
-		# payload = {
-		# 	'id': user_id,
-		# 	'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
-		# }
-		# token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+	  # 아이디, 비밀번호가 일치하는 경우
+    if (find_user == None): # 아이디 없음
+      print("미가입 아이디")
+      return jsonify({'result': 'fail','message':'미가입 아이디'})
+      # payload = {
+      # 	'id': user_id,
+      # 	'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
+      # }
+      # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-	elif (find_user['user_id'] == user_id and find_user['user_password'] == user_password):
-		
-		return jsonify({'result': 'success', 'message': '로그인 성공'})
-	# 아이디, 비밀번호가 일치하지 않는 경우
-	else:
-		return jsonify({'result': 'fail'})
+    elif (find_user['user_id'] == user_id and find_user['user_password'] == user_password):
+      
+      return jsonify({'result': 'success', 'message': '로그인 성공'})
+    # 아이디, 비밀번호가 일치하지 않는 경우
+    else:
+      return jsonify({'result': 'fail'})
 
 
 
