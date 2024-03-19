@@ -17,35 +17,22 @@
         <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">로그인</button>
       </header>
       <div class="flex justify-between">
-        <h2 class="text-[32px] font-semibold">{{ name }}님 장비를 자랑해 봅시다</h2>
+        <h2 class="text-[32px] font-semibold">{{ name }}님 장비를 장비를 구경해봐요</h2>
       </div>
       <hr class="mt-[8px] mb-[16px]" />
       <section class="max-w-[520px] mx-auto">
         <article>
-          <h3 class="text-[24px] font-bold mb-[8px]">사진등록</h3>
-          <input id="photo" type="file" class="hidden">
-          <label id="preview" for="photo" class="w-[520px] h-[520px] flex border-[1px] cursor-pointer justify-center items-center flex-col gap-[12px] rounded-[4px]">
-            <span>사진을 업로드 해주세요</span>
-            <span class="p-[8px] bg-blue-500 write-btn font-semibold text-sm text-white rounded-[4px]">업로드</span>
-          </label>
+          <h3 class="text-[24px] font-bold mb-[8px]">{{ name }}</h3>
+          <img id="profile" src="{{ image }}" alt="profile" class="w-[520px] h-[520px] rounded-[4px]">
         </article>
         <article class="mt-[16px] mb-[20px]">
           <h3 class="flex items-end mb-[8px]">
             <span class="text-[24px] font-bold">세부내용</span>
-            <span>(마크다운으로 작성해 주세요)</span>
-            <a href="https://gist.github.com/ihoneymon/652be052a0727ad59601" target="_blank" class="block underline ml-auto text-[#295add]">마크다운사용법</a>
           </h3>
-          <textarea id="markdown-input" class="block w-[520px] h-[800px] p-[16px] rounded-[4px] bg-[#e0e0e0] resize-none"></textarea>
-          <div class="flex place-content-between mt-[20px]">
-            <button id="preview_btn" class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-[#5e5e5e] rounded-[4px] text-white">미리보기</button>
-            <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">공유하기</button>
-          </div>
-					<div id="markdown_preview_modal" class="fixed flex items-center justify-center w-full h-full bg-[#00000050] top-0 left-0 cursor-pointer hidden" title="클릭해서 닫아 주세요">
-						<div id="markdown_preview" class="w-[600px] h-full max-h-[80%] bg-white overflow-auto p-[20px]"></div>
-					</div>
+          <div id="markdown_section" class="block w-[520px] h-[800px] p-[16px] rounded-[4px] border-[1px] border-[#e0e0e0]">{{detail}}</div>
         </article>
       </section>
-      <script type="module" src="{{ url_for('static', filename='front/modules/feed.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='front/modules/feedDetail.js') }}"></script>
     </main>
   </body>
 </html>

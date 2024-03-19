@@ -31,8 +31,9 @@ def feed():
   return render_template("feed.html", name="테스터")
 
 @app.route("/feed_detail")
-def feed_detail():
-  return render_template("feedDetail.html", name="테스터")
+def feed_():
+  detail = f"""# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6"""
+  return render_template("feedDetail.html", name="테스터", image="https://via.placeholder.com/520x520", detail=detail)
 
 ## api
 # 회원가입
