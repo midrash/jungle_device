@@ -1,5 +1,5 @@
 import { apiService } from '../modules/ApiService.js';
-import { $ } from './utils/dom.js';
+import { $ } from '../utils/dom.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const $signInBtn = $('.sign-in-btn');
@@ -12,6 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const [id, nickName, password, password_check] = formData.values();
 
     console.log(id, nickName, password, password_check);
-    // apiService.signIn({ id, password, password_check, nickName });
+    apiService.signIn({ id, password, password_check, nickName });
   });
 });
