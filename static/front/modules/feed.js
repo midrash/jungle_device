@@ -1,4 +1,4 @@
-document.getElementById('photo').addEventListener('change', function(e) {
+document.querySelector('#photo').addEventListener('change', function(e) {
   const files = e.target.files;
   const preview = document.getElementById('preview');
 
@@ -23,7 +23,29 @@ document.getElementById('photo').addEventListener('change', function(e) {
       // 미리보기 영역에 이미지 추가
       preview.appendChild(img);
     };
-		
+
     reader.readAsDataURL(file);
   });
 });
+
+// 마크다운 입력을 HTML로 변환하고 미리보기를 업데이트하는 함수
+function updatePreview() {
+	const markdownText = document.getElementById('markdown-input').value;
+	document.querySelector('#markdown_preview').innerHTML = marked.parse(markdownText);
+}
+
+// preview_btn 버튼을 클릭할 때마다 변환을 업데이트
+document.querySelector('#preview_btn').addEventListener('click', updatePreview);
+
+// #markdown_preview_modal 클릭 시 모달창 닫기
+document.querySelector('#markdown_preview_modal').addEventListener('click', function() {
+	this.classList.add('hidden');
+});
+
+// #preview_btn 클릭 시 모달창 열기
+document.querySelector('#preview_btn').addEventListener('click', function() {
+	document.querySelector('#markdown_preview_modal').classList.remove('hidden');
+});
+
+// 초기 미리보기 업데이트
+updatePreview();
