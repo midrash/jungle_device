@@ -16,8 +16,8 @@ document.querySelector('#photo').addEventListener('change', function(e) {
       img.src = e.target.result;
 
       // 이미지 스타일 설정
-      img.style.width = '420px';
-      img.style.height = '420px';
+      img.style.width = '520px';
+      img.style.height = '520px';
 			img.style.objectFit = 'cover';
 			
       // 미리보기 영역에 이미지 추가
