@@ -8,18 +8,17 @@ const appendCards = () => {
     .map(
       ({ imageUrl, content }) =>
         `
-        <div class=" shadow-lg w-[240px] border p-[24px]">
-        <div class="flex flex-col items-center gap-[16px]">
+        <li>
+        <div>
           <img
             src="${imageUrl}"
             alt="Image"
-            class="border rounded-[8px] object-fit"
           />
-            <p class="multi-ellipsis h-[100px] multi-ellipsis font-semibold">
+            <p class="multi-ellipsis">
             ${content}
             </p>
         </div>
-      </div>
+      </li>
   `
     )
     .join('');
