@@ -31,7 +31,7 @@ def feed():
   return render_template("feed.html", name="테스터")
 
 @app.route("/feed_detail")
-def feed():
+def feed_detail():
   return render_template("feedDetail.html", name="테스터")
 
 ## api
