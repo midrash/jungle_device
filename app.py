@@ -7,7 +7,9 @@ app = Flask(__name__, static_folder="static")
 client = MongoClient("localhost", 27017)
 db = client.jungle
 
+SECRET_KEY = 'jungle'
 
+## 주소
 # HTML 화면 보여주기
 @app.route("/")
 def home():
@@ -17,11 +19,14 @@ def home():
 # def hello(name):
 #     return render_template('index.html', name=name)
 
-SECRET_KEY = 'jungle'
+@app.route("/signup")
+def page_signup():
+  return render_template("signInPage.html", name="테스터")
 
+## api
 # 회원가입
-@app.route("/signin", methods=["POST"])
-def signin_proc():
+@app.route("/api/signup", methods=["POST"])
+def signup_proc():
   # 요청 내용 파싱
   print(request.form)
   input_data = request.form
@@ -47,7 +52,7 @@ def signin_proc():
 
 
 # 로그인
-@app.route("/login", methods=["POST"])
+@app.route("/api/login", methods=["POST"])
 def login_proc():
   # 요청 내용 파싱
   print(request.form)
@@ -79,7 +84,7 @@ def login_proc():
 
 
 # API 역할을 하는 부분
-@app.route('/jwt/test', methods=['GET'])
+@app.route('/api/jwt/test', methods=['GET'])
 def jwtTest():
   header = request.headers.get('Authorization')  # Authorization 헤더로 담음
   # 토큰 검증 
