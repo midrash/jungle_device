@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>나무알</title>
     <link href="{{url_for('static', filename='/css/output.css')}}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
@@ -41,7 +42,7 @@
             <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">공유하기</button>
           </div>
 					<div id="markdown_preview_modal" class="fixed flex items-center justify-center w-full h-full bg-[#00000050] top-0 left-0 cursor-pointer hidden" title="클릭해서 닫아 주세요">
-						<div id="markdown_preview" class="w-[600px] h-full max-h-[80%] bg-white overflow-auto p-[20px]"></div>
+						<div id="markdown_preview" class="markdown-body w-[600px] h-full max-h-[80%] bg-white overflow-auto p-[20px]"></div>
 					</div>
         </article>
       </section>
