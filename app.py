@@ -1,8 +1,11 @@
 import jwt
 from pymongo import MongoClient
 from flask import Flask, render_template, jsonify, request
+from flask_cors import CORS, cross_origin
 
 app = Flask(__name__, static_folder="static")
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 client = MongoClient("localhost", 27017)
 db = client.jungle
