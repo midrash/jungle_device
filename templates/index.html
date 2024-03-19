@@ -4,8 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>나무알</title>
-    <link href="../src/output.css" rel="stylesheet" />
-    <link href="../front//public/styles/multiEllipsis.css" rel="stylesheet" />
+    <link href="{{url_for('static', filename='/css/output.css')}}" rel="stylesheet" />
+    <link href="{{url_for('static', filename='/front/public/styles/multiEllipsis.css')}}" rel="stylesheet" />
   </head>
   <body>
     <main class="max-w-[760px] mx-auto">
@@ -17,7 +17,7 @@
         <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">로그인</button>
       </header>
       <div class="flex justify-between">
-        <h2 class="text-[32px] font-semibold">{{ name }님 반가워요 ! }</h2>
+        <h2 class="text-[32px] font-semibold">{{ name }}님 반가워요 !</h2>
 
         <!-- !name display : none -->
         <div class="flex justify-center items-center gap-[8px]">
@@ -29,6 +29,7 @@
       <hr class="mt-[8px] mb-[16px]" />
       <ul class="card-list flex flex-wrap gap-[20px]"></ul>
     </main>
-    <script src="../front/modules/index.js" type="module"></script>
+
+    <script type="module" src="{{ url_for('static', filename='front/modules/index.js') }}"></script>
   </body>
 </html>
