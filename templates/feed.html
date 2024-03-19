@@ -20,10 +20,15 @@
       </div>
       <hr class="mt-[8px] mb-[16px]" />
       <section class="max-w-[420px] mx-auto">
-        <h3>사진등록</h3>
-        <input id="photo" type="text">
-        <label for="photo" class="w-[100px] h-[100px] block"></label>
+        <h3 class="text-[24px] font-bold mb-[8px]">사진등록</h3>
+        <input id="photo" type="file" class="hidden">
+        <label id="preview" for="photo" class="w-[420px] h-[420px] flex border-[1px] cursor-pointer justify-center items-center flex-col gap-[12px]">
+          <span>사진을 업로드 해주세요</span>
+          <span class="p-[8px] bg-blue-500 write-btn font-semibold text-sm text-white rounded-[4px]">업로드</span>
+        </label>
       </section>
+
+      <script type="module" src="{{ url_for('static', filename='front/modules/feed.js') }}"></script>
     </main>
   </body>
 </html>
