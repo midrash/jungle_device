@@ -28,8 +28,8 @@ def signin_proc():
 	user_name = input_data['user_name']
  
     # 아이디 중복 조회
-	find_user_id = db.users.find_one({'user_id': user_id})
-	print(user_id)
+	find_user = db.users.find_one({'user_id': user_id})
+	print(find_user)
  
 	user ={
 		'user_id': user_id,
@@ -38,7 +38,7 @@ def signin_proc():
 	}
 	#return jsonify({'result': 'success', 'user': user})
 	# 중복되는 아이디가 없을경우
-	if (find_user_id == None):
+	if (find_user == None):
 		print("중복 아이디 없음")
 		db.users.insert_one(user)
 		return jsonify({'result': 'success', 'message': '등록 완료'})
@@ -51,23 +51,29 @@ def signin_proc():
 # 로그인
 @app.route("/login", methods=['POST'])
 def login_proc():
+	# 요청 내용 파싱 
 	print(request.form)
 	input_data = request.form
 	user_id = input_data['user_id']
 	user_password = input_data['user_password']
 
+    # 가입 여부 확인
+	find_user = db.users.find_one({'user_id': user_id})
+	print(find_user)
+
 	# 아이디, 비밀번호가 일치하는 경우
-	if (user_id == admin_id and
-			user_password == admin_pw):
-		payload = {
-			'id': user_id,
-			'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
-		}
-		token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+	if (find_user == None): # 아이디 없음
+		print("미가입 아이디")
+		return jsonify({'result': 'fail','message':'미가입 아이디'})
+		# payload = {
+		# 	'id': user_id,
+		# 	'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
+		# }
+		# token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-		return jsonify({'result': 'success', 'token': token})
-
-
+	elif (find_user['user_id'] == user_id and find_user['user_password'] == user_password):
+		
+		return jsonify({'result': 'success', 'message': '로그인 성공'})
 	# 아이디, 비밀번호가 일치하지 않는 경우
 	else:
 		return jsonify({'result': 'fail'})
