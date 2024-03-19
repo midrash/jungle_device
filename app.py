@@ -13,6 +13,11 @@ db = client.jungle
 def home():
 	return render_template("index.html", name="테스터")
 
+# feed상세 화면 보여주기
+@app.route("/feed")
+def feed():
+	return render_template("feed.html",  name="테스터")
+
 # @app.route('/<name>')
 # def hello(name):
 #     return render_template('index.html', name=name)
