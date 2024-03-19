@@ -49,3 +49,11 @@ document.querySelector('#preview_btn').addEventListener('click', function() {
 
 // 초기 미리보기 업데이트
 updatePreview();
+
+// #delete_feed 버튼 클릭 시 confirm 창 띄우고 확인 시 삭제요청
+document.querySelector('#delete_feed').addEventListener('click', function() {
+  if (confirm('정말 삭제하시겠습니까?')) {
+    const feedId = this.dataset.feedId;
+    location.href = `/feed/delete/${feedId}`;
+  }
+});
