@@ -29,22 +29,21 @@ class ApiService {
   // }
 
   async signIn({ id, password, password_check, nickName }) {
-    try {
-      const res = await fetch(`${this.#BASE_URL}/api/signup`, {
-        method: 'POST',
-        body: {
-          user_id: id,
-          user_password: password,
-          user_name: nickName,
-        },
-      });
-      const data = res.json();
-      alert('성공');
-    } catch (error) {
-      console.log(error);
+    let body = {
+      user_id: id,
+      user_password: password,
+      user_name: nickName,
     }
-
-    console.log(data);
+    fetch('http://192.168.1.175:5000/api/signup', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body : JSON.stringify(body),
+    })
+  .then((response) => console.log("response:", response.message))
+  .catch((error) => console.log("error:", error));
+    //console.log(data);
   }
 }
 

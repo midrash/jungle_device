@@ -39,29 +39,31 @@ def feed_():
 # 회원가입
 @app.route("/api/signup", methods=["POST"])
 def signup_proc():
-  # 요청 내용 파싱
-  print(request.form)
-  input_data = request.form
-  user_id = input_data["user_id"]
-  user_password = input_data["user_password"]
-  user_name = input_data["user_name"]
-
-  # 아이디 중복 조회
+  #   # 요청 내용 파싱
+#   print(request.form)
+#   input_data = request.form
+#   user_id = input_data["user_id"]
+#   user_password = input_data["user_password"]
+#   user_name = input_data["user_name"]
+  print(request.json)
+  user_id = request.json["user_id"]
+  user_password = request.json["user_password"]
+  user_name = request.json["user_name"]
+  # return jsonify({"result": "success", "user": user})
+  # # 아이디 중복 조회
   find_user = db.users.find_one({"user_id": user_id})
   print(find_user)
-
   user = {"user_id": user_id, "user_password": user_password, "user_name": user_name}
   # return jsonify({'result': 'success', 'user': user})
   # 중복되는 아이디가 없을경우
   if find_user == None:
-      print("중복 아이디 없음")
-      db.users.insert_one(user)
-      return jsonify({"result": "success", "message": "등록 완료"})
+    print("중복 아이디 없음")
+    db.users.insert_one(user)
+    return jsonify({"result": "success", "message": "등록 완료"})
 
   # 아이디, 비밀번호가 일치하지 않는 경우
   else:
-      return jsonify({"result": "fail", "message": "아이디 중복됨"})
-
+    return jsonify({"result": "fail", "message": "아이디 중복됨"})
 
 # 로그인
 @app.route("/api/login", methods=["POST"])
