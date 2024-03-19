@@ -1,5 +1,5 @@
+import jwt
 from pymongo import MongoClient
-
 from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__, static_folder="static")
@@ -13,11 +13,13 @@ db = client.jungle
 def home():
     return render_template("index.html", name="테스터")
 
+# @app.route('/<name>')
+# def hello(name):
+#     return render_template('index.html', name=name)
 
 admin_id = "Minsu"
 admin_pw = "123456"
-SECRET_KEY = "apple"
-
+SECRET_KEY = 'apple'
 
 # 회원가입
 @app.route("/signin", methods=["POST"])
@@ -59,24 +61,23 @@ def login_proc():
     find_user = db.users.find_one({"user_id": user_id})
     print(find_user)
 
-    # 아이디, 비밀번호가 일치하는 경우
-    if find_user == None:  # 아이디 없음
-        print("미가입 아이디")
-        return jsonify({"result": "fail", "message": "미가입 아이디"})
-        # payload = {
-        # 	'id': user_id,
-        # 	'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
-        # }
-        # token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+	# 아이디, 비밀번호가 일치하는 경우
+	if (find_user == None): # 아이디 없음
+		print("미가입 아이디")
+		return jsonify({'result': 'fail','message':'미가입 아이디'})
+		# payload = {
+		# 	'id': user_id,
+		# 	'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
+		# }
+		# token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
 
-    elif (
-        find_user["user_id"] == user_id and find_user["user_password"] == user_password
-    ):
+	elif (find_user['user_id'] == user_id and find_user['user_password'] == user_password):
+		
+		return jsonify({'result': 'success', 'message': '로그인 성공'})
+	# 아이디, 비밀번호가 일치하지 않는 경우
+	else:
+		return jsonify({'result': 'fail'})
 
-        return jsonify({"result": "success", "message": "로그인 성공"})
-    # 아이디, 비밀번호가 일치하지 않는 경우
-    else:
-        return jsonify({"result": "fail"})
 
 
 # # API 역할을 하는 부분
