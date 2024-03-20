@@ -126,21 +126,15 @@ def login_proc():
 @app.route("/api/feed", methods=["POST"])
 def feed_upload_proc():
     # # 토큰 검증
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    # find_user = tokenVerification(token)
-    # if find_user == False:
-    #     return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     # 요청 내용 파싱
-    # print(request.json)
-    # detail = request.json["detail"]
-    # print(detail)
-    # image = request.json["image"]
-
     print(request.form)
     print(request.files)
-    file = request.files["file"]
-    print(file.filename)
+    file = request.files["image"]
     input_data = request.form
     detail = input_data["detail"]
     # 파일 업로드
@@ -159,16 +153,16 @@ def feed_upload_proc():
 
 
 ## 피드 수정
-@app.route("/api/feed", methods=["PUT"])
-def feed_update_proc():
+@app.route("/api/feed/<arg>", methods=["PUT"])
+def feed_update_proc(arg):
     # 토큰 검증
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    # find_user = tokenVerification(token)
-    # if find_user == False:
-    #     return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     # 요청 내용 파싱
-    file = request.files["file"]
+    file = request.files["image"]
     input_data = request.form
     detail = input_data["detail"]
     # 파일 업로드
@@ -180,7 +174,7 @@ def feed_update_proc():
         "detail": detail,
         "image": file_path,
     }
-    db.feeds.update_one({_id: 1})
+    db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
     return jsonify({"result": "success", "message": "성공"})
 
 
@@ -261,7 +255,6 @@ def tokenVerification(token):
 def uploade_file(file):
     try:
         time = datetime.datetime.now()
-        # file = request.files["file"]
         timestemp = (
             str(time.year)
             + str(time.month)
@@ -289,7 +282,7 @@ def uploade_file(file):
 def uploader_file():
     try:
         time = datetime.datetime.now()
-        file = request.files["file"]
+        file = request.files["image"]
         timestemp = (
             str(time.year)
             + str(time.month)
