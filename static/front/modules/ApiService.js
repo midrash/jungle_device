@@ -7,7 +7,6 @@ class ApiService {
 
   async login({ id, password }) {
     try {
-      console.log(id, password);
       const res = await fetch(`${this.#BASE_URL}/api/login`, {
         method: 'POST',
         headers: {
@@ -113,16 +112,61 @@ class ApiService {
     return feeds;
   }
 
-  async uploadFeed({ image, detail, formData }) {
-    await fetch(`${this.#BASE_URL}/api/feed`, {
-      method: 'POST',
+  async fetchFeedDetail({ postID, token }) {
+    const res = await fetch(`${this.#BASE_URL}/api/feed/detail/${postID}`, {
+      method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-      },
-      data: {
-        form_data: formData,
+        Authorization: token,
       },
     });
+
+    if (res.ok) {
+      alert('통신성공');
+      return;
+    }
+
+    alert('통신실패');
+  }
+
+  // async uploadFeed({ token, formData }) {
+  //   const res = await fetch(`${BASE_URL}api/feed`, {
+  //     method: 'POST',
+  //     headers: {
+  //       Authorization: token,
+  //     },
+  //     body: formData,
+  //   });
+
+  //   if (res.ok) {
+  //     const data = await res.json();
+
+  //     if ((data.result = SUCCESS)) {
+  //       alert('업로드 성공 !');
+  //       // addtional : 업로드하면 피드 디테일 페이지로 이동
+  //       window.location.href = '/feed';
+  //     } else {
+  //       alert('서버에 문제가 생겨 파일을 업로드 하지 못했습니다.');
+  //     }
+  //   }
+  // }
+
+  async deleteFeed({ postID, token }) {
+    const res = await fetch(`${this.#BASE_URL}/api/feed`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: token,
+      },
+      body: JSON.stringify({
+        id: postID,
+      }),
+    });
+
+    if (res.ok) {
+      alert('삭제완료');
+      return;
+    }
+
+    alert('삭제실패');
   }
 
   async isLogin({ token }) {
