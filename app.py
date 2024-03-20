@@ -186,6 +186,27 @@ def feed_update_proc(arg):
     return jsonify({"result": "success", "message": "성공"})
 
 
+## 피드 삭제
+@app.route("/api/feed", methods=["DELETE"])
+def feed_delete_proc():
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    # 요청 내용 파싱
+    print(request.json)
+    id = request.json["id"]
+    db_result = db.feeds.find_one({"_id": ObjectId(id)})
+    print(db_result["user_id"])
+    print(find_user["user_id"])
+    if db_result["user_id"] == find_user["user_id"]:
+        db.feeds.delete_one({"_id": ObjectId(id)})
+        return jsonify({"result": "success", "message": "삭제 완료"})
+    else:
+        return jsonify({"result": "fail", "message": "해당 유저의 피드 아님"})
+
+
 ## 공구 모집
 @app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
 def feed_groupbuy_proc(arg):
