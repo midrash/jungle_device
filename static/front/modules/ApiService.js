@@ -83,6 +83,18 @@ class ApiService {
   #failLogin(message) {
     alert(message);
   }
+
+  async uploadFeed({ image, detail, formData }) {
+    await fetch(`${this.#BASE_URL}/api/feed`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        form_data: formData,
+      },
+    });
+  }
 }
 
 export const apiService = new ApiService();
