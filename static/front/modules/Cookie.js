@@ -3,18 +3,10 @@ class Cookie {
   #nickName;
 
   getToken() {
-    if (!document.cookie) {
-      return false;
-    }
-
     return document.cookie.split('; ')[0].split('=')[1];
   }
 
   getNickName() {
-    if (!document.cookie) {
-      return false;
-    }
-
     return document.cookie.split('; ')[1].split('=')[1];
   }
 

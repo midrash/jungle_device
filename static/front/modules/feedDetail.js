@@ -12,6 +12,10 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   const myFeedInfo = await apiService.fetchMyFeed({ postID, token });
   const isMyFeed = myFeedInfo.findIndex(({ _id }) => _id === postID);
 
+  console.log(myFeedInfo);
+  console.log('token : ', cookie.getToken());
+  console.log('hasToken', cookie.getToken());
+
   if (isMyFeed) $('.delete-btn').classList.remove('hidden');
   if (cookie.getToken) {
     $('.login-btn').classList.remove('hidden');
