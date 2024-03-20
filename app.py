@@ -49,8 +49,7 @@ def signup_proc():
   user_id = request.json["user_id"]
   user_password = request.json["user_password"]
   user_name = request.json["user_name"]
-  # return jsonify({"result": "success", "user": user})
-  # # 아이디 중복 조회
+	# 아이디 중복 조회
   find_user = db.users.find_one({"user_id": user_id})
   print(find_user)
   user = {"user_id": user_id, "user_password": user_password, "user_name": user_name}
@@ -68,12 +67,10 @@ def signup_proc():
 # 로그인
 @app.route("/api/login", methods=["POST"])
 def login_proc():
-  # 요청 내용 파싱
-  print(request.form)
-  input_data = request.form
-  user_id = input_data["user_id"]
-  user_password = input_data["user_password"]
-
+  # 요청 내용 파싱  
+  print(request.json)
+  user_id = request.json["user_id"]
+  user_password = request.json["user_password"]
   # 가입 여부 확인
   find_user = db.users.find_one({"user_id": user_id})
   print(find_user)
