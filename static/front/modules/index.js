@@ -16,24 +16,29 @@ const handleClickCard = (e) => {
 const createFeedCards = async (target = $('.card-list')) => {
   const feeds = await apiService.fetchFeed();
 
+  console.log(feeds); // feeds를 console에 출력
+
   const cardsHTML = feeds
     .map(
-      ({ image, detail, _id }) =>
-        `
+      ({ image, detail, _id }) => {
+        const detailHTML = marked.parse(detail);
+        
+        console.log(detailHTML); // detail을 console에 출력
+        return `
 				<li id="feed_detail" data-id="${_id}">
 					<div>
 						<img
 							src="${image}"
 							alt="Image"
 						/>
-							<p id="text_preview" class="multi-ellipsis">
-							${detail}
-							</p>
+            <div id="text_preview" class="multi-ellipsis">${detailHTML}</div>
 					</div>
 				</li>
-  		`
+  		`;
+      }
     )
     .join('');
+
 
   target.innerHTML = cardsHTML;
 };
@@ -65,7 +70,4 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await createFeedCards($cardList);
-  // 마크다운 변환
-  const $textPreview = $('#text_preview');
-  $("#text_preview").innerHTML = marked.parse($textPreview.innerHTML);
 });
