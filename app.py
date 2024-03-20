@@ -160,6 +160,7 @@ def feed_upload_proc():
         "detail": detail,
         "image": file_path,
         "groupbuy": False,
+        "like": 0,
     }
     db.feeds.insert_one(feed)
     return jsonify({"result": "success", "message": "성공"})
@@ -242,7 +243,15 @@ def read_feeds():
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = list(
         db.feeds.find(
-            {}, {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "image": 1}
+            {},
+            {
+                "_id": 1,
+                "user_id": 1,
+                "user_name": 1,
+                "detail": 1,
+                "image": 1,
+                "like": 1,
+            },
         )
     )
     for item in db_result:
@@ -298,7 +307,14 @@ def read_my_feeds():
     db_result = list(
         db.feeds.find(
             {"user_id": find_user["user_id"]},
-            {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "image": 1},
+            {
+                "_id": 1,
+                "user_id": 1,
+                "user_name": 1,
+                "detail": 1,
+                "image": 1,
+                "like": 1,
+            },
         )
     )
     for item in db_result:
@@ -428,6 +444,18 @@ def get_name_from_token():
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
         return jsonify({"result": "success", "message": db_result})
+
+
+## 피드 좋아요
+@app.route("/api/feed/like", methods=["PUT"])
+def feed_like_proc():
+    # 요청 내용 파싱
+    print(request.json)
+    id = request.json["id"]
+    db_result = db.feeds.find_one({"_id": ObjectId(id)})
+    like = db_result["like"] + 1
+    db.feeds.update_one({"_id": ObjectId(id)}, {"$set": {"like": like}})
+    return jsonify({"result": "success", "message": "좋아요+1"})
 
 
 if __name__ == "__main__":
