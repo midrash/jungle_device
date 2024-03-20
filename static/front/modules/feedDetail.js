@@ -13,11 +13,25 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   const isMyFeed = myFeedInfo.findIndex(({ _id }) => _id === postID);
 
   if (isMyFeed) $('.delete-btn').classList.remove('hidden');
+  if (cookie.getToken) {
+    $('.login-btn').classList.remove('hidden');
+    $('.logout-btn').classList.add('hidden');
+  }
+  if (!cookie.getToken) {
+    $('.logout-btn').classList.add('hidden');
+    $('.logout-btn').classList.remove('hidden');
+  }
 
   $('.logout-btn').addEventListener('click', (e) => {
     e.preventDefault();
 
     cookie.deleteAllCookies();
+    location.href = '/user/login';
+  });
+
+  $('.login-btn').addEventListener('click', (e) => {
+    e.preventDefault();
+
     location.href = '/user/login';
   });
 
