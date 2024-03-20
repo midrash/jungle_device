@@ -130,23 +130,43 @@ def feed_upload_proc():
     find_user = tokenVerification(token)
     if find_user == False:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
-    else:
-        feed = {
-            "user_id": find_user["user_id"],
-            "user_name": find_user["user_name"],
-            "detail": detail,
-            "image": "http://192.168.1.175:5000/static/images/test.jpeg",
-        }
-        db.feeds.insert_one(feed)
-        return jsonify({"result": "success", "message": "성공"})
+
+    feed = {
+        "user_id": find_user["user_id"],
+        "user_name": find_user["user_name"],
+        "detail": detail,
+        "image": "http://192.168.1.175:5000/static/images/test.jpeg",
+    }
+    db.feeds.insert_one(feed)
+    return jsonify({"result": "success", "message": "성공"})
 
 
 ## 피드 조회
 @app.route("/api/feed", methods=["GET"])
 def read_feeds():
-    print("token_result :")
+    db_result = list(db.feeds.find({}, {"_id": False}))
+    if db_result == None:
+        return jsonify({"result": "fail", "message": "피드 조회 실패"})
+    else:
+        return jsonify({"result": "success", "message": db_result})
 
-    return jsonify({"result": "success", "message": "성공"})
+
+## 내 피드 조회
+@app.route("/api/feed/my", methods=["GET"])
+def read_my_feeds():
+
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+
+    # 내 피드 검색
+    db_result = list(db.feeds.find({"user_id": find_user["user_id"]}, {"_id": False}))
+    if db_result == None:
+        return jsonify({"result": "fail", "message": "피드 조회 실패"})
+    else:
+        return jsonify({"result": "success", "message": db_result})
 
 
 # API 역할을 하는 부분
@@ -179,15 +199,13 @@ def tokenVerification(token):
 
 
 # 몽고디비 테스트 함수
-def dbtest(token):
-    try:
-        find_user = db.feeds.find()
-        if find_user == None:
-            return False
-        else:
-            return find_user
-    except:
-        return False
+@app.route("/api/db/test", methods=["GET"])
+def dbTest():
+    db_result = list(db.feeds.find({}, {"_id": False}))
+    if db_result == None:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    else:
+        return jsonify({"result": "success", "message": db_result})
 
 
 if __name__ == "__main__":
