@@ -9,9 +9,10 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
   const postID = location.href.split('/').at(-1);
   const token = cookie.getToken();
-  const myFeed = await apiService.fetchMyFeed({ postID, token });
+  const myFeedInfo = await apiService.fetchMyFeed({ postID, token });
+  const isMyFeed = myFeedInfo.findIndex(({ _id }) => _id === postID);
 
-  console.log(myFeed);
+  if (isMyFeed) $('.delete-btn').classList.remove('hidden');
 
   $('.logout-btn').addEventListener('click', (e) => {
     e.preventDefault();
@@ -20,18 +21,11 @@ document.addEventListener('DOMContentLoaded', async (event) => {
     location.href = '/user/login';
   });
 
-  $('.delete-btn').addEventListener('click', (e) => {
+  $('.delete-btn').addEventListener('click', async (e) => {
     e.preventDefault();
 
-    const postId = location.href.split('/').at(-1);
-    // 토큰이랑 id 보내서 삭제 post delete구현
+    await apiService.deleteFeed({ postID, token });
+
+    location.href = '/feed';
   });
-
-  // const is = myFeed.findIndex(({ _id }) => {
-  //   return _id === location.href.split('/').at(-1);
-  // });
-
-  // if (is === 1) {
-  //   $('.delete-btn').classList.remove('hidden');
-  // }
 });

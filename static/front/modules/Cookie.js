@@ -7,7 +7,7 @@ class Cookie {
   }
 
   getNickName() {
-    return this.#nickName;
+    return document.cookie.split('; ')[1].split('=')[1];
   }
 
   setCookies(coockies) {

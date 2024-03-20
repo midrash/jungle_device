@@ -165,11 +165,19 @@ class ApiService {
     });
 
     if (res.ok) {
-      alert('삭제완료');
-      return;
-    }
+      const data = await res.json();
+      if (data.result === SUCCESS) {
+        alert('삭제완료');
+        return;
+      }
 
-    alert('삭제실패');
+      if (data.result === FAIL) {
+        alert('삭제 실패');
+        return;
+      }
+    } else {
+      alert('서버 통신 에러');
+    }
   }
 
   async isLogin({ token }) {
