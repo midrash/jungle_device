@@ -125,20 +125,21 @@ def login_proc():
 ## 피드 등록
 @app.route("/api/feed", methods=["POST"])
 def feed_upload_proc():
-    # 토큰 검증
-    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    find_user = tokenVerification(token)
-    if find_user == False:
-        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    # # 토큰 검증
+    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    # find_user = tokenVerification(token)
+    # if find_user == False:
+    #     return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     # 요청 내용 파싱
     # print(request.json)
     # detail = request.json["detail"]
     # print(detail)
     # image = request.json["image"]
-    file = request.files["file"]
+
+    # file = request.files["image"]
+    # print(file.filename)
     input_data = request.form
-    print(file.filename)
     detail = input_data["detail"]
     print(detail)
     # 파일 업로드
@@ -160,10 +161,10 @@ def feed_upload_proc():
 @app.route("/api/feed", methods=["PUT"])
 def feed_update_proc():
     # 토큰 검증
-    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    find_user = tokenVerification(token)
-    if find_user == False:
-        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    # find_user = tokenVerification(token)
+    # if find_user == False:
+    #     return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     # 요청 내용 파싱
     file = request.files["file"]
