@@ -154,6 +154,7 @@ class ApiService {
   // }
 
   async deleteFeed({ postID, token }) {
+    console.log(postID, token);
     const res = await fetch(`${this.#BASE_URL}/api/feed`, {
       method: 'DELETE',
       headers: {
