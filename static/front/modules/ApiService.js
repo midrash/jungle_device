@@ -169,12 +169,12 @@ class ApiService {
     if (res.ok) {
       const data = await res.json();
       if (data.result === SUCCESS) {
-        alert('삭제완료');
+        alert('삭제 완료');
         return;
       }
 
       if (data.result === FAIL) {
-        alert('삭제 실패');
+        alert('본인 게시글만 삭제가 가능합니다 !');
         return;
       }
     } else {
