@@ -7,19 +7,19 @@ const appendCards = () => {
   const cardsHTML = mock
     .map(
       ({ imageUrl, content }) =>
-        `
-        <li>
-        <div>
-          <img
-            src="${imageUrl}"
-            alt="Image"
-          />
-            <p class="multi-ellipsis">
-            ${content}
-            </p>
-        </div>
-      </li>
-  `
+			`
+				<li id="feed_detail">
+					<div>
+						<img
+							src="${imageUrl}"
+							alt="Image"
+						/>
+							<p class="multi-ellipsis">
+							${content}
+							</p>
+					</div>
+				</li>
+  		`
     )
     .join('');
   $cardList.innerHTML = cardsHTML;
@@ -27,4 +27,10 @@ const appendCards = () => {
 
 document.addEventListener('DOMContentLoaded', () => {
   appendCards();
+});
+
+document.addEventListener('click', (e) => {
+	if (e.target.id === 'feed_detail') {
+		location.href = 'feed/detail/1';
+	}
 });

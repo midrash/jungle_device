@@ -13,8 +13,10 @@
     <main class="max-w-[760px] mx-auto">
       <header class="flex justify-between items-center my-[20px]">
         <h1>
-          <span class="text-[40px] text-purple-600 font-bold">나무알</span>
-          <span>나의 무기를 알리고싶어</span>
+          <a href="/feed">
+            <span class="text-[40px] text-purple-600 font-bold">나무알</span>
+            <span>나의 무기를 알리고싶어</span>
+          </a>
         </h1>
         <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">로그아웃</button>
       </header>
@@ -50,7 +52,7 @@
 					</div>
         </article>
       </section>
-      <script type="module" src="{{ url_for('static', filename='front/modules/feed.js') }}"></script>
+      <script type="module" src="{{ url_for('static', filename='front/modules/feedEditor.js') }}"></script>
     </main>
   </body>
 </html>

@@ -12,20 +12,23 @@
     <main class="max-w-[760px] mx-auto">
       <header class="flex justify-between items-center my-[20px]">
         <h1>
-          <span class="text-[40px] text-purple-600 font-bold">나무알</span>
-          <span>나의 무기를 알리고싶어</span>
+          <a href="/feed">
+            <span class="text-[40px] text-purple-600 font-bold">나무알</span>
+            <span>나의 무기를 알리고싶어</span>
+          </a>
         </h1>
-        <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">로그인</button>
+        <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">로그인</button>
       </header>
       <div class="flex justify-between">
         <h2 class="text-[32px] font-semibold">{{ name }}님 반가워요 !</h2>
 
         <!-- !name display : none -->
         <div class="flex justify-center items-center gap-[8px]">
-          <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">글쓰기</button>
-          <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">내피드보기</button>
+          <a href="/feed/editor" class="flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">글쓰기</a>
+          <button class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">내피드보기</button>
         </div>
         <!-- !name display : none -->
+        
       </div>
       <hr class="mt-[8px] mb-[16px]" />
       <ul class="card-list flex flex-wrap gap-[20px]"></ul>
