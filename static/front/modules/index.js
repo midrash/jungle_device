@@ -26,7 +26,7 @@ const createFeedCards = async (target = $('.card-list')) => {
 							src="${image}"
 							alt="Image"
 						/>
-							<p class="multi-ellipsis">
+							<p id="text_preview" class="multi-ellipsis">
 							${detail}
 							</p>
 					</div>
@@ -65,4 +65,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   await createFeedCards($cardList);
+  // 마크다운 변환
+  const $textPreview = $('#text_preview');
+  $("#text_preview").innerHTML = marked.parse($textPreview.innerHTML);
 });

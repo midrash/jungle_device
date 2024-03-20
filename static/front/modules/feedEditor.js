@@ -49,7 +49,7 @@ function updatePreview() {
     marked.parse(markdownText);
 }
 
-// preview_btn 버튼을 클릭할 때마다 변환을 업데이트
+// 마크다운 미리보기
 document.querySelector('#preview_btn').addEventListener('click', updatePreview);
 
 // #markdown_preview_modal 클릭 시 모달창 닫기
