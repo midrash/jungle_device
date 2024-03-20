@@ -2,6 +2,11 @@
   pointer-events: none;
 }
 
+.card-list > li p, .card-list > li p * {
+  display: block;
+  width: 100%;
+}
+
 .card-list > li {
   width: 240px;
   padding: 24px;
