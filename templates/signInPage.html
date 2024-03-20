@@ -7,7 +7,15 @@
     <link href="{{url_for('static', filename='/css/output.css')}}" rel="stylesheet" />
   </head>
   <body>
-    <main class="max-w-[760px] mx-auto font-bold flex flex-col justify-center items-center mt-[32px]">
+    <main class="max-w-[760px] mx-auto font-bold flex flex-col justify-center items-center">
+      <header class="flex justify-between items-center my-[20px] self-start">
+        <h1>
+          <a href="/feed">
+            <span class="text-[40px] text-purple-600 font-bold">나무알</span>
+            <span>나의 무기를 알리고싶어</span>
+          </a>
+        </h1>
+      </header>
       <h2 class="text-[40px] p-[20px]">회원가입</h2>
       <form class="sign-in-form bg-slate-100 w-[360px] px-[32px] py-[16px] flex flex-col gap-[16px] border border-blue-300 rounded-[8px] shadow-lg">
         <label class="flex flex-col text-[12px]" for="id">
