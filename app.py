@@ -137,23 +137,24 @@ def feed_upload_proc():
     # print(detail)
     # image = request.json["image"]
 
-    # file = request.files["image"]
-    # print(file.filename)
+    print(request.form)
+    print(request.files)
+    file = request.files["file"]
+    print(file.filename)
     input_data = request.form
     detail = input_data["detail"]
-    print(detail)
     # 파일 업로드
     file_path = uploade_file(file)
     if file_path == False:
         return jsonify({"result": "fail", "message": "파일 업로드 실패"})
 
     feed = {
-        "user_id": find_user["user_id"],
-        "user_name": find_user["user_name"],
+        # "user_id": find_user["user_id"],
+        # "user_name": find_user["user_name"],
         "detail": detail,
         "image": file_path,
     }
-    db.feeds.insert_one(feed)
+    # db.feeds.insert_one(feed)
     return jsonify({"result": "success", "message": "성공"})
 
 
