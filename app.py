@@ -25,20 +25,20 @@ def home():
 
 
 # 회원가임
-@app.route("user/signup")
+@app.route("/user/signup")
 def page_signup():
     return render_template("signInPage.html", name="테스터")
 
 
 # 로그인
-@app.route("user/login")
-def page_signup():
+@app.route("/user/login")
+def page_login():
     return render_template("logInPage.html", name="테스터")
 
 
 # 피드 상세보기
 @app.route("/feed/detail/<number>")
-def feed_(number):
+def feed_detail(number):
     detail = f"""# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6"""
     return render_template(
         "feedDetail.html",
