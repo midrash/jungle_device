@@ -80,7 +80,7 @@ const uploadFeed = () => {
 
     const res = await fetch(`${BASE_URL}api/feed`, {
       method: 'POST',
-      'auth-token': token,
+      Authorization: token,
       body: formData,
     });
 
