@@ -1,8 +1,12 @@
 import jwt
+import datetime
+
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from werkzeug.utils import secure_filename
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
+
 
 app = Flask(__name__, static_folder="static")
 cors = CORS(app)
@@ -121,24 +125,60 @@ def login_proc():
 ## 피드 등록
 @app.route("/api/feed", methods=["POST"])
 def feed_upload_proc():
-    # 요청 내용 파싱
-    print(request.json)
-    detail = request.json["detail"]
-    # image = request.json["image"]
-
     # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     find_user = tokenVerification(token)
     if find_user == False:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
+    # 요청 내용 파싱
+    # print(request.json)
+    # detail = request.json["detail"]
+    # print(detail)
+    # image = request.json["image"]
+    file = request.files["file"]
+    input_data = request.form
+    print(file.filename)
+    detail = input_data["detail"]
+    print(detail)
+    # 파일 업로드
+    file_path = uploade_file(file)
+    if file_path == False:
+        return jsonify({"result": "fail", "message": "파일 업로드 실패"})
+
     feed = {
         "user_id": find_user["user_id"],
         "user_name": find_user["user_name"],
         "detail": detail,
-        "image": "http://192.168.1.175:5000/static/images/test.jpeg",
+        "image": file_path,
     }
     db.feeds.insert_one(feed)
+    return jsonify({"result": "success", "message": "성공"})
+
+
+## 피드 수정
+@app.route("/api/feed", methods=["PUT"])
+def feed_update_proc():
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+
+    # 요청 내용 파싱
+    file = request.files["file"]
+    input_data = request.form
+    detail = input_data["detail"]
+    # 파일 업로드
+    file_path = uploade_file(file)
+    if file_path == False:
+        return jsonify({"result": "fail", "message": "파일 업로드 실패"})
+
+    feed = {
+        "detail": detail,
+        "image": file_path,
+    }
+    db.feeds.update_one({_id: 1})
     return jsonify({"result": "success", "message": "성공"})
 
 
@@ -213,6 +253,61 @@ def tokenVerification(token):
             return find_user
     except:
         return False
+
+
+# 파일 업로드
+def uploade_file(file):
+    try:
+        time = datetime.datetime.now()
+        # file = request.files["file"]
+        timestemp = (
+            str(time.year)
+            + str(time.month)
+            + str(time.day)
+            + str(time.hour)
+            + str(time.minute)
+            + str(time.microsecond)
+        )
+        filename = (
+            file.filename.rsplit(".", 1)[0]
+            + timestemp
+            + "."
+            + file.filename.rsplit(".", 1)[1]
+        )
+        print(filename)
+        filePath = "/static/images/" + secure_filename(filename)
+        file.save("." + filePath)
+        return filePath
+    except:
+        return False
+
+
+# 이미지 업로드
+@app.route("/file/uploader", methods=["POST"])
+def uploader_file():
+    try:
+        time = datetime.datetime.now()
+        file = request.files["file"]
+        timestemp = (
+            str(time.year)
+            + str(time.month)
+            + str(time.day)
+            + str(time.hour)
+            + str(time.minute)
+            + str(time.microsecond)
+        )
+        filename = (
+            file.filename.rsplit(".", 1)[0]
+            + timestemp
+            + "."
+            + file.filename.rsplit(".", 1)[1]
+        )
+        print(filename)
+        filePath = "/static/images/" + secure_filename(filename)
+        file.save("." + filePath)
+        return jsonify({"result": "success", "filePath": filePath})
+    except:
+        return jsonify({"result": "fail", "message": "파일 업로드 실패"})
 
 
 # 몽고디비 테스트 함수
