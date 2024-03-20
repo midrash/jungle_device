@@ -59,7 +59,7 @@ def feed_detail(number):
         return render_template("index.html", name="테스터")
     else:
         db_result["_id"] = str(db_result["_id"])
-        db_result["image"] = "http://192.168.1.175:6000" + db_result["image"]
+        db_result["image"] = "http://192.168.1.175:5000" + db_result["image"]
         return render_template(
             "feedDetail.html",
             name=db_result["user_name"],
@@ -247,7 +247,7 @@ def read_feeds():
     )
     for item in db_result:
         item["_id"] = str(item["_id"])
-        item["image"] = "http://192.168.1.175:6000" + item["image"]
+        item["image"] = "http://192.168.1.175:5000" + item["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -272,7 +272,7 @@ def read_feed_detail(arg):
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = db.feeds.find_one({"_id": ObjectId(arg)})
     db_result["_id"] = str(db_result["_id"])
-    db_result["image"] = "http://192.168.1.175:6000" + db_result["image"]
+    db_result["image"] = "http://192.168.1.175:5000" + db_result["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -303,7 +303,7 @@ def read_my_feeds():
     )
     for item in db_result:
         item["_id"] = str(item["_id"])
-        item["image"] = "http://192.168.1.175:6000" + item["image"]
+        item["image"] = "http://192.168.1.175:5000" + item["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -431,4 +431,4 @@ def get_name_from_token():
 
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=6000, debug=True)
+    app.run("0.0.0.0", port=5000, debug=True)

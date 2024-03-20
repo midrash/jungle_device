@@ -1,7 +1,7 @@
 import { $ } from '../utils/dom.js';
 import { cookie } from './Cookie.js';
 
-const BASE_URL = 'http://192.168.1.175:6000/';
+const BASE_URL = 'http://192.168.1.175:5000/';
 const SUCCESS = 'success';
 const FAIL = 'fail';
 
