@@ -3,10 +3,20 @@ class Cookie {
   #nickName;
 
   getToken() {
+    if (!document.cookie) {
+      alert('로그인 이후 사용가능합니다.');
+      return false;
+    }
+
     return document.cookie.split('; ')[0].split('=')[1];
   }
 
   getNickName() {
+    if (!document.cookie) {
+      alert('로그인 이후 사용가능합니다.');
+      return false;
+    }
+
     return document.cookie.split('; ')[1].split('=')[1];
   }
 
