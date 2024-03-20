@@ -1,5 +1,6 @@
 import { $ } from '../utils/dom.js';
 import { apiService } from './ApiService.js';
+import { cookie } from './Cookie.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const $loginForm = $('.log-in-form');
@@ -18,6 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const { token, userName } = res;
 
-    document.cookie = encodeURIComponent(`token=${token}; name=${userName};`);
+    cookie.setCookies({
+      token,
+      nickName: userName,
+    });
   });
 });
