@@ -54,13 +54,18 @@ def page_login():
 # 피드 상세보기
 @app.route("/feed/detail/<number>")
 def feed_detail(number):
-    detail = f"""# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6# This is a H1\n## This is a H2\n### This is a H3\n#### This is a H4\n##### This is a H5\n###### This is a H6"""
-    return render_template(
-        "feedDetail.html",
-        name="테스터",
-        image="https://via.placeholder.com/520x520",
-        detail=detail,
-    )
+    db_result = db.feeds.find_one({"_id": ObjectId(number)})
+    if db_result == None:
+        return render_template("index.html", name="테스터")
+    else:
+        db_result["_id"] = str(db_result["_id"])
+        db_result["image"] = "http://192.168.1.175:5000" + db_result["image"]
+        return render_template(
+            "feedDetail.html",
+            name=db_result["user_name"],
+            image=db_result["image"],
+            detail=db_result["detail"],
+        )
 
 
 # 피드 작성
@@ -156,56 +161,77 @@ def feed_upload_proc():
         "image": file_path,
         "groupbuy": False,
     }
-    # db.feeds.insert_one(feed)
+    db.feeds.insert_one(feed)
     return jsonify({"result": "success", "message": "성공"})
 
 
-## 피드 수정
-@app.route("/api/feed/<arg>", methods=["PUT"])
-def feed_update_proc(arg):
+# ## 피드 수정
+# @app.route("/api/feed/<arg>", methods=["PUT"])
+# def feed_update_proc(arg):
+#     # 토큰 검증
+#     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+#     find_user = tokenVerification(token)
+#     if find_user == False:
+#         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+
+#     # 요청 내용 파싱
+#     file = request.files["image"]
+#     input_data = request.form
+#     detail = input_data["detail"]
+#     # 파일 업로드
+#     file_path = uploade_file(file)
+#     if file_path == False:
+#         return jsonify({"result": "fail", "message": "파일 업로드 실패"})
+
+#     feed = {
+#         "detail": detail,
+#         "image": file_path,
+#     }
+#     db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
+#     return jsonify({"result": "success", "message": "성공"})
+
+
+## 피드 삭제
+@app.route("/api/feed", methods=["DELETE"])
+def feed_delete_proc():
     # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     find_user = tokenVerification(token)
     if find_user == False:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
-
     # 요청 내용 파싱
-    file = request.files["image"]
-    input_data = request.form
-    detail = input_data["detail"]
-    # 파일 업로드
-    file_path = uploade_file(file)
-    if file_path == False:
-        return jsonify({"result": "fail", "message": "파일 업로드 실패"})
-
-    feed = {
-        "detail": detail,
-        "image": file_path,
-    }
-    db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
-    return jsonify({"result": "success", "message": "성공"})
-
-
-## 공구 모집
-@app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
-def feed_groupbuy_proc(arg):
-    # 토큰 검증
-    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    find_user = tokenVerification(token)
-    if find_user == False:
-        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
-
     print(request.json)
-    contact = request.json["contact"]
-    link = request.json["link"]
-    feed = {
-        "groupbuy": True,
-        "representative": find_user["user_name"],
-        "contact": contact,
-        "link": link,
-    }
-    db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
-    return jsonify({"result": "success", "message": "성공"})
+    id = request.json["id"]
+    db_result = db.feeds.find_one({"_id": ObjectId(id)})
+    print(db_result["user_id"])
+    print(find_user["user_id"])
+    if db_result["user_id"] == find_user["user_id"]:
+        db.feeds.delete_one({"_id": ObjectId(id)})
+        return jsonify({"result": "success", "message": "삭제 완료"})
+    else:
+        return jsonify({"result": "fail", "message": "해당 유저의 피드 아님"})
+
+
+# ## 공구 모집
+# @app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
+# def feed_groupbuy_proc(arg):
+#     # 토큰 검증
+#     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+#     find_user = tokenVerification(token)
+#     if find_user == False:
+#         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+
+#     print(request.json)
+#     contact = request.json["contact"]
+#     link = request.json["link"]
+#     feed = {
+#         "groupbuy": True,
+#         "representative": find_user["user_name"],
+#         "contact": contact,
+#         "link": link,
+#     }
+#     db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
+#     return jsonify({"result": "success", "message": "성공"})
 
 
 ## 피드 조회
@@ -216,12 +242,12 @@ def read_feeds():
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = list(
         db.feeds.find(
-            {}, {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "images": 1}
+            {}, {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "image": 1}
         )
     )
     for item in db_result:
         item["_id"] = str(item["_id"])
-
+        item["image"] = "http://192.168.1.175:5000" + item["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -246,6 +272,7 @@ def read_feed_detail(arg):
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = db.feeds.find_one({"_id": ObjectId(arg)})
     db_result["_id"] = str(db_result["_id"])
+    db_result["image"] = "http://192.168.1.175:5000" + db_result["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -271,11 +298,12 @@ def read_my_feeds():
     db_result = list(
         db.feeds.find(
             {"user_id": find_user["user_id"]},
-            {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "images": 1},
+            {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "image": 1},
         )
     )
     for item in db_result:
         item["_id"] = str(item["_id"])
+        item["image"] = "http://192.168.1.175:5000" + item["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
