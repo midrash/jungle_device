@@ -37,15 +37,31 @@ const createFeedCards = async (target = $('.card-list'), feeds) => {
 
 document.addEventListener('DOMContentLoaded', async () => {
   const $cardList = $('.card-list');
-  $cardList.addEventListener('click', handleClickCard);
+  const $watchMyFeedBtn = $('.watch-my-feed-btn');
+  const $logoutBtn = $('.logout-btn');
   const token = cookie.getToken();
-  $('.logout-btn').addEventListener('click', () => {
+
+  $cardList.addEventListener('click', handleClickCard);
+  $logoutBtn.addEventListener('click', () => {
     cookie.deleteAllCookies();
     location.href = '/feed';
   });
-  $('.watch-my-feed-btn').addEventListener('click', async () => {
+  $watchMyFeedBtn.addEventListener('click', async () => {
     const myFeed = await apiService.fetchMyFeed({ token });
-    createFeedCards($cardList, myFeed);
+
+    $watchMyFeedBtn.classList.add('hidden');
+    $('.watch-all-feed-btn').classList.remove('hidden');
+
+    await createFeedCards($cardList, myFeed);
+  });
+
+  $('.watch-all-feed-btn').addEventListener('click', async () => {
+    const allFeed = await apiService.fetchFeed();
+
+    $watchMyFeedBtn.classList.remove('hidden');
+    $('.watch-all-feed-btn').classList.add('hidden');
+
+    await createFeedCards($cardList, allFeed);
   });
 
   if (
@@ -54,18 +70,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   ) {
     $('.logout-btn').classList.add('hidden');
     $('.write-btn').classList.add('hidden');
-    $('.watch-my-feed-btn').classList.add('hidden');
+    $watchMyFeedBtn.classList.add('hidden');
     $('.login-btn').classList.remove('hidden');
   }
 
   if (document.cookie.includes('token')) {
     $('.logout-btn').classList.remove('hidden');
     $('.write-btn').classList.remove('hidden');
-    $('.watch-my-feed-btn').classList.remove('hidden');
+    $watchMyFeedBtn.classList.remove('hidden');
     $('.login-btn').classList.add('hidden');
   }
+
   const allFeed = await apiService.fetchFeed();
   await createFeedCards($cardList, allFeed);
+
   // 마크다운 변환
   const $textPreview = $('#text_preview');
   $('#text_preview').innerHTML = marked.parse($textPreview.innerText);
