@@ -75,11 +75,12 @@ const uploadFeed = () => {
 
   $uploadBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-
+    const [token] = document.cookie.split('; ')[0].split('=');
     const formData = new FormData($feedEditorForm);
 
     const res = await fetch(`${BASE_URL}api/feed`, {
       method: 'POST',
+      'auth-token': token,
       body: formData,
     });
 
