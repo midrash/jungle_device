@@ -1,5 +1,6 @@
 import jwt
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
 
@@ -144,7 +145,21 @@ def feed_upload_proc():
 ## 피드 조회
 @app.route("/api/feed", methods=["GET"])
 def read_feeds():
-    db_result = list(db.feeds.find({}, {"_id": False}))
+    db_result = list(db.feeds.find())
+    for item in db_result:
+        item["_id"] = str(item["_id"])
+
+    if db_result == None:
+        return jsonify({"result": "fail", "message": "피드 조회 실패"})
+    else:
+        return jsonify({"result": "success", "message": db_result})
+
+
+## 피드 상세 조회
+@app.route("/api/feed/detail/<arg>", methods=["GET"])
+def read_feed_detail(arg):
+    db_result = db.feeds.find_one({"_id": ObjectId(arg)})
+    db_result["_id"] = str(db_result["_id"])
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -162,7 +177,9 @@ def read_my_feeds():
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     # 내 피드 검색
-    db_result = list(db.feeds.find({"user_id": find_user["user_id"]}, {"_id": False}))
+    db_result = list(db.feeds.find({"user_id": find_user["user_id"]}))
+    for item in db_result:
+        item["_id"] = str(item["_id"])
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -201,12 +218,14 @@ def tokenVerification(token):
 # 몽고디비 테스트 함수
 @app.route("/api/db/test", methods=["GET"])
 def dbTest():
-    db_result = list(db.feeds.find({}, {"_id": False}))
-    if db_result == None:
+    db_result = list(db.feeds.find())
+    print(db_result)
+    new_data = [{k: v for k, v in item.items() if k != "_id"} for item in db_result]
+    if new_data == None:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
     else:
-        return jsonify({"result": "success", "message": db_result})
+        return jsonify({"result": "success", "message": new_data})
 
 
 if __name__ == "__main__":
-    app.run("0.0.0.0", port=5001, debug=True)
+    app.run("0.0.0.0", port=5000, debug=True)
