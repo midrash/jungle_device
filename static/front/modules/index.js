@@ -1,21 +1,21 @@
 import { $ } from '../utils/dom.js';
-import { mock } from '../public/mock/mock.js';
+import { apiService } from './ApiService.js';
 
-const appendCards = () => {
+const appendCards = (feeds) => {
   const $cardList = $('.card-list');
 
-  const cardsHTML = mock
+  const cardsHTML = feeds
     .map(
-      ({ imageUrl, content }) =>
-			`
+      ({ image, detail }) =>
+        `
 				<li id="feed_detail">
 					<div>
 						<img
-							src="${imageUrl}"
+							src="${image}"
 							alt="Image"
 						/>
 							<p class="multi-ellipsis">
-							${content}
+							${detail}
 							</p>
 					</div>
 				</li>
@@ -25,12 +25,14 @@ const appendCards = () => {
   $cardList.innerHTML = cardsHTML;
 };
 
-document.addEventListener('DOMContentLoaded', () => {
-  appendCards();
+document.addEventListener('DOMContentLoaded', async () => {
+  const feeds = await apiService.fetchFeed();
+
+  appendCards(feeds);
 });
 
 document.addEventListener('click', (e) => {
-	if (e.target.id === 'feed_detail') {
-		location.href = 'feed/detail/1';
-	}
+  if (e.target.id === 'feed_detail') {
+    location.href = 'feed/detail/1';
+  }
 });
