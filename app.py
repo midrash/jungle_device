@@ -12,7 +12,7 @@ app = Flask(__name__, static_folder="static")
 cors = CORS(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 
-client = MongoClient("localhost", 27017)
+client = MongoClient("192.168.1.175", 27017)
 db = client.jungle
 
 SECRET_KEY = "jungle"
