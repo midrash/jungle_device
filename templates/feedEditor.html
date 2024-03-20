@@ -43,12 +43,12 @@
               <span>(마크다운으로 작성해 주세요)</span>
               <a href="https://gist.github.com/ihoneymon/652be052a0727ad59601" target="_blank" class="block underline ml-auto text-[#295add]">마크다운사용법</a>
             </h3>
-            <textarea id="markdown-input" class="block w-[520px] h-[800px] p-[16px] rounded-[4px] bg-[#e0e0e0] resize-none"></textarea>
+            <textarea id="markdown-input" name="detail" class="block w-[520px] h-[800px] p-[16px] rounded-[4px] bg-[#e0e0e0] resize-none"></textarea>
             <div class="flex place-content-between mt-[20px]">
               <button id="preview_btn" class="write-btn w-[88px] h-[40px] font-semibold text-sm bg-[#5e5e5e] rounded-[4px] text-white">미리보기</button>
               <button class="feed-upload-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">공유하기</button>
             </div>
-            <div id="markdown_preview_modal" name="detail" class="fixed flex items-center justify-center w-full h-full bg-[#00000050] top-0 left-0 cursor-pointer hidden" title="클릭해서 닫아 주세요">
+            <div id="markdown_preview_modal" class="fixed flex items-center justify-center w-full h-full bg-[#00000050] top-0 left-0 cursor-pointer hidden" title="클릭해서 닫아 주세요">
               <div id="markdown_preview" class="markdown-body w-[600px] h-full max-h-[80%] bg-white overflow-auto p-[20px]"></div>
             </div>
           </form>
