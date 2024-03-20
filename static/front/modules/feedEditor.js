@@ -75,26 +75,32 @@ const uploadFeed = () => {
 
   $uploadBtn.addEventListener('click', async (e) => {
     e.preventDefault();
-    const [token] = document.cookie.split('; ')[0].split('=');
+    const [tokenCookie] = decodeURIComponent(document.cookie).split('; ');
+    const [_, token] = tokenCookie.split('=');
     const formData = new FormData($feedEditorForm);
 
-    const res = await fetch(`${BASE_URL}api/feed`, {
-      method: 'POST',
-      headers: {
-        Authorization: token,
-      },
-      body: formData,
-    });
+    try {
+      const res = await fetch(`${BASE_URL}api/feed`, {
+        method: 'POST',
+        headers: {
+          Authorization: token,
+        },
+        body: formData,
+      });
 
-    if (res.ok) {
-      const data = await res.json();
+      if (res.ok) {
+        const data = await res.json();
 
-      if ((data.result = SUCCESS)) {
-        alert('업로드 성공 !');
-        // addtional : 업로드하면 피드 디테일 페이지로 이동
-      } else {
-        alert('서버에 문제가 생겨 파일을 업로드 하지 못했습니다.');
+        if ((data.result = SUCCESS)) {
+          alert('업로드 성공 !');
+          // addtional : 업로드하면 피드 디테일 페이지로 이동
+          window.location.href = '/feed';
+        } else {
+          alert('서버에 문제가 생겨 파일을 업로드 하지 못했습니다.');
+        }
       }
+    } catch (error) {
+      alert('서버에 문제가 생겨 파일을 업로드 하지 못했습니다.');
     }
   });
 };
