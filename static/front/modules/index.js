@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('.write-btn').classList.add('hidden');
     $watchMyFeedBtn.classList.add('hidden');
     $('.login-btn').classList.remove('hidden');
+    $('.welcome-title').innerText = '게스트';
   }
 
   if (document.cookie.includes('token')) {
@@ -79,6 +80,11 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('.write-btn').classList.remove('hidden');
     $watchMyFeedBtn.classList.remove('hidden');
     $('.login-btn').classList.add('hidden');
+    $('.welcome-title').innerText = '게스트';
+
+    $('.welcome-title').innerText = `${
+      document.cookie.split('; ')[1].split('=')[1]
+    }`;
   }
 
   const allFeed = await apiService.fetchFeed();
