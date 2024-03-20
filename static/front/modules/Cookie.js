@@ -4,7 +4,6 @@ class Cookie {
 
   getToken() {
     if (!document.cookie) {
-      alert('로그인 이후 사용가능합니다.');
       return false;
     }
 
@@ -13,7 +12,6 @@ class Cookie {
 
   getNickName() {
     if (!document.cookie) {
-      alert('로그인 이후 사용가능합니다.');
       return false;
     }
 
