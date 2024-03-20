@@ -49,7 +49,7 @@ function updatePreview() {
     marked.parse(markdownText);
 }
 
-// 마크다운 미리보기
+// preview_btn 버튼을 클릭할 때마다 변환을 업데이트
 document.querySelector('#preview_btn').addEventListener('click', updatePreview);
 
 // #markdown_preview_modal 클릭 시 모달창 닫기
@@ -67,19 +67,11 @@ document.querySelector('#preview_btn').addEventListener('click', function () {
 // 초기 미리보기 업데이트
 updatePreview();
 
-// #delete_feed 버튼 클릭 시 confirm 창 띄우고 확인 시 삭제요청
-document.querySelector('#delete_feed').addEventListener('click', function () {
-  if (confirm('정말 삭제하시겠습니까?')) {
-    const feedId = this.dataset.feedId;
-    location.href = `/feed/delete/${feedId}`;
-  }
-});
-
-const handleClickUpload = async (e) => {};
-
-const uploadFeed = () => {
+document.addEventListener('DOMContentLoaded', () => {
   const $feedEditorForm = $('.feed-editor-form');
   const $uploadBtn = $('.feed-upload-btn');
+
+  console.log($uploadBtn);
 
   $uploadBtn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -87,6 +79,7 @@ const uploadFeed = () => {
     const [_, token] = tokenCookie.split('=');
     const formData = new FormData($feedEditorForm);
 
+    console.log(formData);
     try {
       const res = await fetch(`${BASE_URL}api/feed`, {
         method: 'POST',
@@ -111,6 +104,4 @@ const uploadFeed = () => {
       alert('서버에 문제가 생겨 파일을 업로드 하지 못했습니다.');
     }
   });
-};
-
-uploadFeed();
+});
