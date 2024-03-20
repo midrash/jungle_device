@@ -18,12 +18,12 @@ document.addEventListener('DOMContentLoaded', async (event) => {
 
   if (isMyFeed) $('.delete-btn').classList.remove('hidden');
   if (cookie.getToken) {
-    $('.login-btn').classList.remove('hidden');
-    $('.logout-btn').classList.add('hidden');
+    $('.login-btn').classList.add('hidden');
+    $('.logout-btn').classList.remove('hidden');
   }
   if (!cookie.getToken) {
+    $('.login-btn').classList.remove('hidden');
     $('.logout-btn').classList.add('hidden');
-    $('.logout-btn').classList.remove('hidden');
   }
 
   $('.logout-btn').addEventListener('click', (e) => {
