@@ -13,32 +13,24 @@ const handleClickCard = (e) => {
   location.href = `/feed/detail/${id}`;
 };
 
-const createFeedCards = async (target = $('.card-list')) => {
-  const feeds = await apiService.fetchFeed();
-
-  console.log(feeds); // feeds를 console에 출력
-
+const createFeedCards = async (target = $('.card-list'), feeds) => {
   const cardsHTML = feeds
-    .map(
-      ({ image, detail, _id }) => {
-        const detailHTML = marked.parse(detail);
-        
-        console.log(detailHTML); // detail을 console에 출력
-        return `
-				<li id="feed_detail" data-id="${_id}">
-					<div>
-						<img
-							src="${image}"
-							alt="Image"
-						/>
-            <div id="text_preview" class="multi-ellipsis">${detailHTML}</div>
-					</div>
-				</li>
-  		`;
-      }
-    )
-    .join('');
+    .map(({ image, detail, _id }) => {
+      const detailHTML = marked.parse(detail);
 
+      return `
+        <li id="feed_detail" data-id="${_id}">
+        <div>
+          <img
+            src="${image}"
+            alt="Image"
+          />
+          <div id="text_preview" class="multi-ellipsis">${detailHTML}</div>
+        </div>
+      </li>
+  		`;
+    })
+    .join('');
 
   target.innerHTML = cardsHTML;
 };
@@ -46,10 +38,14 @@ const createFeedCards = async (target = $('.card-list')) => {
 document.addEventListener('DOMContentLoaded', async () => {
   const $cardList = $('.card-list');
   $cardList.addEventListener('click', handleClickCard);
-  const JWTtoken = cookie.getToken();
+  const token = cookie.getToken();
   $('.logout-btn').addEventListener('click', () => {
     cookie.deleteAllCookies();
     location.href = '/feed';
+  });
+  $('.watch-my-feed-btn').addEventListener('click', async () => {
+    const myFeed = await apiService.fetchMyFeed({ token });
+    createFeedCards($cardList, myFeed);
   });
 
   if (
@@ -68,6 +64,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     $('.watch-my-feed-btn').classList.remove('hidden');
     $('.login-btn').classList.add('hidden');
   }
-
-  await createFeedCards($cardList);
+  const allFeed = await apiService.fetchFeed();
+  await createFeedCards($cardList, allFeed);
+  // 마크다운 변환
+  const $textPreview = $('#text_preview');
+  $('#text_preview').innerHTML = marked.parse($textPreview.innerText);
 });

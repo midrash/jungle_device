@@ -89,12 +89,12 @@ class ApiService {
     return feeds;
   }
 
-  async fetchMyFeed() {
+  async fetchMyFeed({ token }) {
     try {
       const res = await fetch(`${this.#BASE_URL}/api/feed/my`, {
         method: 'GET',
         headers: {
-          Authorization: cookie.getToken(),
+          Authorization: token,
         },
       });
 
@@ -121,8 +121,11 @@ class ApiService {
     });
 
     if (res.ok) {
-      alert('통신성공');
-      return;
+      const data = await res.json();
+
+      alert('통신성공;;;;');
+
+      return data;
     }
 
     alert('통신실패');
