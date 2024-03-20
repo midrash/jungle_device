@@ -48,7 +48,7 @@ def page_signup():
 # 로그인
 @app.route("/user/login")
 def page_login():
-    return render_template("logInPage.html", name="테스터")
+    return render_template("loginPage.html", name="테스터")
 
 
 # 피드 상세보기
