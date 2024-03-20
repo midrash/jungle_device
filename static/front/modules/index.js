@@ -25,7 +25,7 @@ const createFeedCards = async (target = $('.card-list'), feeds) => {
             src="${image}"
             alt="Image"
           />
-          <div id="text_preview" class="multi-ellipsis">${detailHTML}</div>
+          <div id="text_preview" class="markdown-body multi-ellipsis">${detailHTML}</div>
         </div>
       </li>
   		`;
