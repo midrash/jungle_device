@@ -2,16 +2,8 @@ class Cookie {
   #token;
   #nickName;
 
-  constructor(
-    token = decodeURIComponent(document.cookie).split('; ')[0],
-    nickName = decodeURIComponent(document.cookie).split('; ')[1]
-  ) {
-    this.#token = !!token ? token.split('=')[1] : null;
-    this.#nickName = !!nickName ? nickName.split('=')[1] : null;
-  }
-
   getToken() {
-    return this.#token;
+    return document.cookie.split('; ')[0].split('=')[1];
   }
 
   getNickName() {
@@ -20,7 +12,7 @@ class Cookie {
 
   setCookies(coockies) {
     [...Object.entries(coockies)].forEach(([key, val]) => {
-      if (key === 'nickName') this.#nickName = this.#nickName;
+      if (key === 'nickName') this.#nickName = key;
       if (key === 'token') this.#token = val;
 
       document.cookie = `${key}=${encodeURIComponent(val)}; Path=/;`;
@@ -30,8 +22,20 @@ class Cookie {
   initialCookie() {
     this.#token = null;
     this.#nickName = null;
-    document.cookie = `token=; Path=/;`;
-    document.cookie = `nickName=; Path=/;`;
+    document.cookie = `token=''; Path=/;`;
+    document.cookie = `nickName=''; Path=/;`;
+  }
+
+  deleteAllCookies() {
+    var cookies = document.cookie.split(';');
+
+    for (var i = 0; i < cookies.length; i++) {
+      var cookie = cookies[i];
+      var eqPos = cookie.indexOf('=');
+      var name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+      document.cookie =
+        name + '=;expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+    }
   }
 }
 

@@ -1,8 +1,16 @@
 import { $ } from '../utils/dom.js';
+import { cookie } from './Cookie.js';
 
 const BASE_URL = 'http://192.168.1.175:5000/';
 const SUCCESS = 'success';
 const FAIL = 'fail';
+
+document.addEventListener('DOMContentLoaded', () => {
+  $('.logout-btn').addEventListener('click', () => {
+    cookie.deleteAllCookies();
+    location.href = '/feed';
+  });
+});
 
 document.querySelector('#photo').addEventListener('change', function (e) {
   const files = e.target.files;

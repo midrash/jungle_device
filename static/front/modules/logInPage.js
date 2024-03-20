@@ -11,17 +11,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData($loginForm);
     const [user_id, user_password] = formData.values();
-
     const res = await apiService.login({
       id: user_id,
       password: user_password,
     });
 
-    const { token, userName } = res;
+    if (res.result === 'fail') {
+      alert(res.message);
+      return;
+    }
 
-    cookie.setCookies({
-      token,
-      nickName: userName,
-    });
+    if (res.result === 'success') {
+      const { token, userName } = res;
+      console.log(token, userName);
+      cookie.setCookies({
+        token,
+        nickName: userName,
+      });
+
+      alert('로그인 성공 !');
+      location.href = '/feed';
+    }
   });
 });

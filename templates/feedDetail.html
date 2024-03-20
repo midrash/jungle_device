@@ -6,7 +6,7 @@
     <title>나무알</title>
     <link href="{{url_for('static', filename='/css/output.css')}}" rel="stylesheet" />
     <link href="{{url_for('static', filename='/css/markdown.css')}}" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/github-markdown-css@5.5.1/github-markdown.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   </head>
   <body>
@@ -18,23 +18,22 @@
             <span>나의 무기를 알리고싶어</span>
           </a>
         </h1>
-        <a href="/user/login" class="flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">로그인</a>
+        <button class="logout-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">로그아웃</button>
       </header>
       <div class="flex justify-between">
         <h2 class="text-[32px] font-semibold">{{ name }}님 장비를 장비를 구경해봐요</h2>
 
         <!-- 개인 피드일때만 활성화 -->
         <div class="flex justify-center items-center gap-[8px]">
-          <a href="/feed/editor" class="flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white">피드수정</a>
+          <button class="delete-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden">피드삭제</button>
         </div>
         <!-- 개인 피드일때만 활성화 -->
-
       </div>
       <hr class="mt-[8px] mb-[16px]" />
       <section class="max-w-[520px] mx-auto">
         <article>
           <h3 class="text-[24px] font-bold mb-[8px]">{{ name }}</h3>
-          <img id="profile" src="{{ image }}" alt="profile" class="w-[520px] h-[520px] rounded-[4px] object-cover">
+          <img id="profile" src="{{ image }}" alt="profile" class="w-[520px] h-[520px] rounded-[4px] object-cover" />
         </article>
         <article class="mt-[16px] mb-[20px]">
           <h3 class="flex items-end mb-[8px]">

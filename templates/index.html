@@ -15,15 +15,16 @@
           <span class="text-[40px] text-purple-600 font-bold">나무알</span>
           <span>나의 무기를 알리고싶어</span>
         </h1>
-        <a href="/user/login" class="write-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">로그인</a>
+        <a href="/user/login" class="login-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">로그인</a>
+        <button class="logout-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500 hidden">로그아웃</button>
       </header>
       <div class="flex justify-between">
         <h2 class="text-[32px] font-semibold">{{ name }}님 반가워요 !</h2>
 
         <!-- !name display : none -->
         <div class="flex justify-center items-center gap-[8px]">
-          <a href="/feed/editor" class="write-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">글쓰기</a>
-          <a class="write-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500">내피드보기</a>
+          <a href="/feed/editor" class="write-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500 hidden">글쓰기</a>
+          <a href="/feed/my" class="watch-my-feed-btn w-[88px] h-[40px] flex justify-center items-center font-semibold text-sm bg-blue-500 rounded-[4px] text-white text-red-500 hidden">내피드보기</a>
         </div>
         <!-- !name display : none -->
       </div>
