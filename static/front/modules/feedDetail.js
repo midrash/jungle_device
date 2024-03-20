@@ -10,9 +10,9 @@ document.addEventListener('DOMContentLoaded', async (event) => {
   const postID = location.href.split('/').at(-1);
   const token = cookie.getToken();
   const myFeedInfo = await apiService.fetchMyFeed({ postID, token });
+  console.log(myFeedInfo);
   const isMyFeed = myFeedInfo.findIndex(({ _id }) => _id === postID);
 
-  console.log(myFeedInfo);
   console.log('token : ', cookie.getToken());
   console.log('hasToken', cookie.getToken());
 
