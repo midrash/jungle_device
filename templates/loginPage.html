@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>로그인</title>
+    <link href="{{url_for('static', filename='/css/output.css')}}" rel="stylesheet" />
+  </head>
+  <body>
+    <main class="max-w-[760px] mx-auto font-bold flex flex-col justify-center items-center mt-[32px]">
+      <h2 class="text-[40px] p-[20px]">로그인</h2>
+      <form class="log-in-form bg-slate-100 w-[360px] px-[32px] py-[16px] flex flex-col gap-[16px] border border-blue-300 rounded-[8px] shadow-lg">
+        <label class="flex flex-col text-[12px]" for="id">
+          <span class="text-[20px] pl-[4px] pb-[4px]">ID</span>
+          <input class="h-[40px] pl-[16px] rounded-[8px] border border-blue-200" id="id" name="id" type="text" placeholder="아이디를 입력해주세요." required />
+        </label>
+        <label class="flex flex-col text-[12px]" for="password">
+          <span class="text-[20px] pl-[4px] pb-[4px]">패스워드</span>
+          <input class="h-[40px] pl-[16px] rounded-[8px] border border-blue-200" id="password" name="password" type="text" placeholder="비밀번호를 입력해주세요." required />
+        </label>
+        <button class="log-in-btn right-0 w-[100] h-[40px] my-[16px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white" type="submit">로그인</button>
+      </form>
+    </main>
+    <script src="{{ url_for('static', filename='front/modules/logInPage.js') }}" type="module"></script>
+  </body>
+</html>
