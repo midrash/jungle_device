@@ -24,9 +24,19 @@ SECRET_KEY = "jungle"
 
 ## 주소
 # 메인화면
-@app.route("/feed")
+@app.route("/feed", methods=["GET"])
 def home():
-    return render_template("index.html", name="테스터")
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    print(token)
+    find_user = tokenVerification(token)
+    print(find_user)
+    if find_user == False:
+        return render_template("index.html", name="테스터", is_loged_in=False)
+    else:
+        return render_template(
+            "index.html", name=find_user["user_name"], is_loged_in=True
+        )
 
 
 # 회원가임
@@ -64,11 +74,6 @@ def feed():
 @app.route("/api/signup", methods=["POST"])
 def signup_proc():
     #   # 요청 내용 파싱
-    #   print(request.form)
-    #   input_data = request.form
-    #   user_id = input_data["user_id"]
-    #   user_password = input_data["user_password"]
-    #   user_name = input_data["user_name"]
     print(request.json)
     user_id = request.json["user_id"]
     user_password = request.json["user_password"]
@@ -127,6 +132,8 @@ def login_proc():
 def feed_upload_proc():
     # # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    print("token")
+    print(token)
     find_user = tokenVerification(token)
     if find_user == False:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
@@ -143,10 +150,11 @@ def feed_upload_proc():
         return jsonify({"result": "fail", "message": "파일 업로드 실패"})
 
     feed = {
-        # "user_id": find_user["user_id"],
-        # "user_name": find_user["user_name"],
+        "user_id": find_user["user_id"],
+        "user_name": find_user["user_name"],
         "detail": detail,
         "image": file_path,
+        "groupbuy": False,
     }
     # db.feeds.insert_one(feed)
     return jsonify({"result": "success", "message": "성공"})
@@ -178,28 +186,75 @@ def feed_update_proc(arg):
     return jsonify({"result": "success", "message": "성공"})
 
 
+## 공구 모집
+@app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
+def feed_groupbuy_proc(arg):
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+
+    print(request.json)
+    contact = request.json["contact"]
+    link = request.json["link"]
+    feed = {
+        "groupbuy": True,
+        "representative": find_user["user_name"],
+        "contact": contact,
+        "link": link,
+    }
+    db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
+    return jsonify({"result": "success", "message": "성공"})
+
+
 ## 피드 조회
 @app.route("/api/feed", methods=["GET"])
 def read_feeds():
-    db_result = list(db.feeds.find())
+
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    db_result = list(
+        db.feeds.find(
+            {}, {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "images": 1}
+        )
+    )
     for item in db_result:
         item["_id"] = str(item["_id"])
 
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
-        return jsonify({"result": "success", "message": db_result})
+        find_user = tokenVerification(token)
+        if find_user == False:
+            return jsonify({"result": "success", "message": db_result})
+        else:
+            return jsonify(
+                {
+                    "result": "success",
+                    "is_loged_in": True,
+                    "user_name": find_user["user_name"],
+                    "message": db_result,
+                }
+            )
 
 
 ## 피드 상세 조회
 @app.route("/api/feed/detail/<arg>", methods=["GET"])
 def read_feed_detail(arg):
+
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = db.feeds.find_one({"_id": ObjectId(arg)})
     db_result["_id"] = str(db_result["_id"])
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
-        return jsonify({"result": "success", "message": db_result})
+        find_user = tokenVerification(token)
+        if find_user["user_id"] == db_result["user_id"]:
+            db_result["my"] = True
+            return jsonify({"result": "success", "message": db_result})
+        else:
+            return jsonify({"result": "success", "message": db_result})
 
 
 ## 내 피드 조회
@@ -213,7 +268,12 @@ def read_my_feeds():
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     # 내 피드 검색
-    db_result = list(db.feeds.find({"user_id": find_user["user_id"]}))
+    db_result = list(
+        db.feeds.find(
+            {"user_id": find_user["user_id"]},
+            {"_id": 1, "user_id": 1, "user_name": 1, "detail": 1, "images": 1},
+        )
+    )
     for item in db_result:
         item["_id"] = str(item["_id"])
     if db_result == None:
@@ -238,17 +298,20 @@ def jwtTest():
 
 # 토큰 검증
 def tokenVerification(token):
-    try:
-        # 토큰 디코딩
-        decoded_token = jwt.decode(token, SECRET_KEY, algorithms="HS256")
-        # 가입 여부 확인
-        find_user = db.users.find_one({"user_id": decoded_token["user_id"]})
-        if find_user == None:
-            return False
-        else:
-            return find_user
-    except:
+    if token == None:
         return False
+    else:
+        try:
+            # 토큰 디코딩
+            decoded_token = jwt.decode(token, SECRET_KEY, algorithms="HS256")
+            # 가입 여부 확인
+            find_user = db.users.find_one({"user_id": decoded_token["user_id"]})
+            if find_user == None:
+                return False
+            else:
+                return find_user
+        except:
+            return False
 
 
 # 파일 업로드
@@ -277,32 +340,32 @@ def uploade_file(file):
         return False
 
 
-# 이미지 업로드
-@app.route("/file/uploader", methods=["POST"])
-def uploader_file():
-    try:
-        time = datetime.datetime.now()
-        file = request.files["image"]
-        timestemp = (
-            str(time.year)
-            + str(time.month)
-            + str(time.day)
-            + str(time.hour)
-            + str(time.minute)
-            + str(time.microsecond)
-        )
-        filename = (
-            file.filename.rsplit(".", 1)[0]
-            + timestemp
-            + "."
-            + file.filename.rsplit(".", 1)[1]
-        )
-        print(filename)
-        filePath = "/static/images/" + secure_filename(filename)
-        file.save("." + filePath)
-        return jsonify({"result": "success", "filePath": filePath})
-    except:
-        return jsonify({"result": "fail", "message": "파일 업로드 실패"})
+# # 이미지 업로드
+# @app.route("/file/uploader", methods=["POST"])
+# def uploader_file():
+#     try:
+#         time = datetime.datetime.now()
+#         file = request.files["image"]
+#         timestemp = (
+#             str(time.year)
+#             + str(time.month)
+#             + str(time.day)
+#             + str(time.hour)
+#             + str(time.minute)
+#             + str(time.microsecond)
+#         )
+#         filename = (
+#             file.filename.rsplit(".", 1)[0]
+#             + timestemp
+#             + "."
+#             + file.filename.rsplit(".", 1)[1]
+#         )
+#         print(filename)
+#         filePath = "/static/images/" + secure_filename(filename)
+#         file.save("." + filePath)
+#         return jsonify({"result": "success", "filePath": filePath})
+#     except:
+#         return jsonify({"result": "fail", "message": "파일 업로드 실패"})
 
 
 # 몽고디비 테스트 함수
@@ -315,6 +378,28 @@ def dbTest():
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
     else:
         return jsonify({"result": "success", "message": new_data})
+
+
+@app.route("/token", methods=["GET"])
+def get_name_from_token():
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    print(token)
+    find_user = tokenVerification(token)
+    print(find_user)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+
+    # 내 피드 검색
+    db_result = db.feeds.find_one(
+        {"user_id": find_user["user_id"]},
+        {"_id": 0, "user_name": 1},
+    )
+
+    if db_result == None:
+        return jsonify({"result": "fail", "message": "피드 조회 실패"})
+    else:
+        return jsonify({"result": "success", "message": db_result})
 
 
 if __name__ == "__main__":
