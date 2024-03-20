@@ -60,12 +60,10 @@ document
   });
 
 // #preview_btn 클릭 시 모달창 열기
-document.querySelector('#preview_btn').addEventListener('click', function () {
+document.querySelector('#preview_btn').addEventListener('click', function (e) {
+  e.preventDefault();
   document.querySelector('#markdown_preview_modal').classList.remove('hidden');
 });
-
-// 초기 미리보기 업데이트
-updatePreview();
 
 document.addEventListener('DOMContentLoaded', () => {
   const $feedEditorForm = $('.feed-editor-form');

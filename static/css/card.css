@@ -2,7 +2,7 @@
   pointer-events: none;
 }
 
-.card-list > li p, .card-list > li p * {
+.card-list > li div, .card-list > li div * {
   display: block;
   width: 100%;
 }
@@ -32,7 +32,7 @@
   object-fit: cover;
 }
 
-.card-list > p {
+.card-list > div {
   font-weight: 700;
   height: 100px;
 }

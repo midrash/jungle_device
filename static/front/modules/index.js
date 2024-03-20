@@ -16,14 +16,11 @@ const handleClickCard = (e) => {
 const createFeedCards = async (target = $('.card-list')) => {
   const feeds = await apiService.fetchFeed();
 
-  console.log(feeds); // feeds를 console에 출력
-
   const cardsHTML = feeds
     .map(
       ({ image, detail, _id }) => {
         const detailHTML = marked.parse(detail);
         
-        console.log(detailHTML); // detail을 console에 출력
         return `
 				<li id="feed_detail" data-id="${_id}">
 					<div>
@@ -31,7 +28,7 @@ const createFeedCards = async (target = $('.card-list')) => {
 							src="${image}"
 							alt="Image"
 						/>
-            <div id="text_preview" class="multi-ellipsis">${detailHTML}</div>
+            <div id="text_preview" class="markdown-body multi-ellipsis">${detailHTML}</div>
 					</div>
 				</li>
   		`;

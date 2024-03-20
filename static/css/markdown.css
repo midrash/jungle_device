@@ -1,4 +1,3 @@
-.markdown-body ul {
-  list-style-type: inherit !important;
+.markdown-body ul, .markdown-body ol {
+   list-style-type: disc !important;
 }
- 
