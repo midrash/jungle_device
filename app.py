@@ -16,7 +16,7 @@ client = MongoClient("localhost", 27017)
 db = client.jungle
 
 SECRET_KEY = "jungle"
-
+BASE_URL = "http://192.168.1.175:5000/"
 # @app.route('/<name>')
 # def hello(name):
 #     return render_template('index.html', name=name)
@@ -59,7 +59,7 @@ def feed_detail(number):
         return render_template("index.html", name="테스터")
     else:
         db_result["_id"] = str(db_result["_id"])
-        db_result["image"] = "http://192.168.1.175:5000" + db_result["image"]
+        db_result["image"] = BASE_URL + db_result["image"]
         return render_template(
             "feedDetail.html",
             name=db_result["user_name"],
@@ -247,7 +247,7 @@ def read_feeds():
     )
     for item in db_result:
         item["_id"] = str(item["_id"])
-        item["image"] = "http://192.168.1.175:5000" + item["image"]
+        item["image"] = BASE_URL + item["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -272,7 +272,7 @@ def read_feed_detail(arg):
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = db.feeds.find_one({"_id": ObjectId(arg)})
     db_result["_id"] = str(db_result["_id"])
-    db_result["image"] = "http://192.168.1.175:5000" + db_result["image"]
+    db_result["image"] = BASE_URL + db_result["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
@@ -303,7 +303,7 @@ def read_my_feeds():
     )
     for item in db_result:
         item["_id"] = str(item["_id"])
-        item["image"] = "http://192.168.1.175:5000" + item["image"]
+        item["image"] = BASE_URL + item["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
