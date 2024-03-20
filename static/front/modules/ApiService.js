@@ -159,6 +159,7 @@ class ApiService {
       method: 'DELETE',
       headers: {
         Authorization: token,
+        'content-type': 'application/json',
       },
       body: JSON.stringify({
         id: postID,
