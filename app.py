@@ -4,7 +4,7 @@ import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 
 
@@ -28,6 +28,8 @@ BASE_URL = "http://192.168.1.175:5000/"
 def home():
     # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    token = request.cookies.get("token")
+    print("토큰이에오")
     print(token)
     find_user = tokenVerification(token)
     print(find_user)
@@ -149,6 +151,7 @@ def feed_upload_proc():
     file = request.files["image"]
     input_data = request.form
     detail = input_data["detail"]
+    product = input_data["product"]
     # 파일 업로드
     file_path = uploade_file(file)
     if file_path == False:
@@ -161,6 +164,7 @@ def feed_upload_proc():
         "image": file_path,
         "groupbuy": False,
         "like": 0,
+        "product": product,
     }
     db.feeds.insert_one(feed)
     return jsonify({"result": "success", "message": "성공"})
@@ -251,6 +255,7 @@ def read_feeds():
                 "detail": 1,
                 "image": 1,
                 "like": 1,
+                "product": 1,
             },
         )
     )
@@ -314,6 +319,7 @@ def read_my_feeds():
                 "detail": 1,
                 "image": 1,
                 "like": 1,
+                "product": 1,
             },
         )
     )
