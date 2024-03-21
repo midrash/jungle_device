@@ -19,13 +19,19 @@
             <img src="{{url_for('static', filename='/images/logo.png')}}" alt="logo" class="drop-shadow-[1px_1px_1px_rgba(0,0,0,0.25)] w-[240px] h-auto" />
           </a>
         </h1>
-        <button class="login-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden custom-btn btn-3"><span>로그인</span></button>
-        <button class="logout-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden custom-btn btn-3"><span>로그아웃</span></button>
+        <button class="login-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden custom-btn btn-3">
+          <span>로그인</span>
+        </button>
+        <button class="logout-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden custom-btn btn-3">
+          <span>로그아웃</span>
+        </button>
       </header>
       <div class="flex justify-between">
         <h2 class="text-[32px] font-semibold drop-shadow-[1px_1px_1px_rgba(0,0,0,0.25)]">{{ name }}님 장비를 장비를 구경해봐요</h2>
         <div class="flex justify-center items-center gap-[8px]">
-          <button class="delete-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden custom-btn btn-3"><span>피드삭제</span></button>
+          <button class="delete-btn flex items-center justify-center write-btn w-[88px] h-[40px] font-semibold text-sm bg-blue-500 rounded-[4px] text-white hidden custom-btn btn-3">
+            <span>피드삭제</span>
+          </button>
         </div>
       </div>
       <hr class="mt-[8px] mb-[16px]" />
@@ -33,6 +39,14 @@
         <article>
           <h3 class="text-[24px] font-bold mb-[8px] drop-shadow-[1px_1px_1px_rgba(0,0,0,0.25)]">{{ name }}</h3>
           <img id="profile" src="{{ image }}" alt="profile" class="w-[520px] h-[520px] rounded-[16px] object-cover" />
+        </article>
+        <article class="mt-[16px] mb-[20px]">
+          <h3 class="flex items-end mb-[8px]">
+            <span class="text-[24px] font-bold drop-shadow-[1px_1px_1px_rgba(0,0,0,0.25)]">
+              제품명 :
+              <span class="text-[24px] font-bold drop-shadow-[1px_1px_1px_rgba(0,0,0,0.25)] text-blue-400">{{product}}</span>
+            </span>
+          </h3>
         </article>
         <article class="mt-[16px] mb-[20px]">
           <h3 class="flex items-end mb-[8px]">

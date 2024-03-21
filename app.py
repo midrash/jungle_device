@@ -67,6 +67,7 @@ def feed_detail(number):
             name=db_result["user_name"],
             image=db_result["image"],
             detail=db_result["detail"],
+            product=db_result["product"],
         )
 
 
