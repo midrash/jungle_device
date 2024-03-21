@@ -12,11 +12,11 @@ app = Flask(__name__, static_folder="static")
 cors = CORS(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 
-client = MongoClient("192.168.1.175", 27017)
+client = MongoClient("3.39.235.188", 27017)
 db = client.jungle
 
 SECRET_KEY = "jungle"
-BASE_URL = "http://192.168.1.175:5000/"
+BASE_URL = "http://3.39.235.188:5000/"
 # @app.route('/<name>')
 # def hello(name):
 #     return render_template('index.html', name=name)
