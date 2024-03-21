@@ -15,13 +15,13 @@ const handleClickCard = (e) => {
 
 const createFeedCards = async (target = $('.card-list'), feeds) => {
   const cardsHTML = feeds
-    .map(({ image, detail, _id }) => {
+    .map(({ image, detail, _id, like }) => {
       const detailHTML = marked.parse(detail);
 
       return `
       <li id="feed_detail" data-id="${_id}">
         <button class="like-btn">
-          <span>11</span>
+          <span>${like}</span>
           <div class="stage">
             <div class="heart is-active"></div>
           </div>
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.stopPropagation();
 
     if (e.target.className !== 'like-btn') return;
-    const heart = e.target.querySelector('.heart')
+    const heart = e.target.querySelector('.heart');
     heart.classList.remove('is-active');
     setTimeout(() => {
       heart.classList.add('is-active');
@@ -82,6 +82,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const postID = e.target.closest('#feed_detail').dataset.id;
 
     await apiService.increaseLikeCount({ postID });
+
+    location.href = '/feed';
   });
 
   if (

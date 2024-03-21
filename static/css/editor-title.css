@@ -1,0 +1,12 @@
+@keyframes fade-in-out {
+  0%,
+  100% {
+    color: #3f61f7;
+  } /* 어두운 색상 */
+  50% {
+    color: #69c3ff;
+  } /* 밝은 색상 */
+}
+.editor-title {
+  animation: fade-in-out 3s infinite;
+}
