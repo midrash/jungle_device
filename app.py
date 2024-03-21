@@ -260,6 +260,7 @@ def read_feeds():
                 "image": 1,
                 "like": 1,
                 "product": 1,
+                "groupbuy": 1,
             },
         )
     )
@@ -324,6 +325,7 @@ def read_my_feeds():
                 "image": 1,
                 "like": 1,
                 "product": 1,
+                "groupbuy": 1,
             },
         )
     )
