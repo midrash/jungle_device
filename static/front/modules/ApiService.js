@@ -131,6 +131,59 @@ class ApiService {
     alert('통신실패');
   }
 
+  async increaseLikeCount({ postID }) {
+    console.log(postID);
+    const res = await fetch(`${this.#BASE_URL}/api/feed/like`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: postID,
+      }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+
+      if (data.result === SUCCESS) {
+        alert('좋아요 + 1');
+      } else {
+        alert('좋아요 실패');
+      }
+
+      return;
+    }
+
+    alert(`HTTP ${res.status} 에러`);
+  }
+
+  async fetchLikeTotalCount({ postID }) {
+    const res = await fetch(`${this.#BASE_URL}/api/feed/like`, {
+      method: 'PUT',
+      headers: {
+        'content-type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: postID,
+      }),
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+
+      if (data.result === SUCCESS) {
+        alert('좋아요 + 1');
+      } else {
+        alert('좋아요 실패');
+      }
+
+      return;
+    }
+
+    alert(`HTTP ${res.status} 에러`);
+  }
+
   // async uploadFeed({ token, formData }) {
   //   const res = await fetch(`${BASE_URL}api/feed`, {
   //     method: 'POST',
