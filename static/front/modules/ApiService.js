@@ -147,7 +147,7 @@ class ApiService {
       const data = await res.json();
 
       if (data.result === SUCCESS) {
-        alert('좋아요 + 1');
+        console.log('좋아요 + 1');
       } else {
         alert('좋아요 실패');
       }

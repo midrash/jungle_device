@@ -83,7 +83,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await apiService.increaseLikeCount({ postID });
 
-    location.href = '/feed';
+    // location.href = '/feed';
   });
 
   if (
