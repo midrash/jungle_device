@@ -1,6 +1,6 @@
 import { $ } from '../utils/dom.js';
 import { apiService } from './ApiService.js';
-import { user } from '../stores/user.js';
+import { user } from '../stores/User.js';
 import { cookie } from './Cookie.js';
 
 const handleClickCard = (e) => {
