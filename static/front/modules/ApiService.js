@@ -3,7 +3,7 @@ import { cookie } from './Cookie.js';
 const FAIL = 'fail';
 const SUCCESS = 'success';
 class ApiService {
-  #BASE_URL = 'http://192.168.1.175:5000';
+  #BASE_URL = 'http://3.39.235.188:5000';
 
   async login({ id, password }) {
     try {
