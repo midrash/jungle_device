@@ -21,7 +21,7 @@ const createFeedCards = async (target = $('.card-list'), feeds) => {
       return `
       <li id="feed_detail" data-id="${_id}">
         <button class="like-btn">
-          <span>${like}</span>
+          <span class="like-count">${like}</span>
           <div class="stage">
             <div class="heart is-active"></div>
           </div>
@@ -73,7 +73,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     if (e.target.className !== 'like-btn') return;
     const heart = e.target.querySelector('.heart');
+    const likeCount = e.target.querySelector('.like-count');
+    const likeCountNumber = Number(likeCount.innerText);
     heart.classList.remove('is-active');
+
+    likeCount.innerText = likeCountNumber + 1;
     setTimeout(() => {
       heart.classList.add('is-active');
     }, 0);
