@@ -21,11 +21,12 @@ const createFeedCards = async (target = $('.card-list'), feeds) => {
 
       return `
       <li id="feed_detail" data-id="${_id}">
-      <button class="like-btn">
-      <svg width="100" height="100" viewBox="0 0 24 24">
-            <path fill="red" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-          </svg>
-      <button>
+        <button class="like-btn">
+          <span>11</span>
+          <div class="stage">
+            <div class="heart is-active"></div>
+          </div>
+        <button>
         <div>
           <img
             src="${image}"
@@ -73,8 +74,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     e.stopPropagation();
 
     if (e.target.className !== 'like-btn') return;
+    const heart = e.target.querySelector('.heart')
+    heart.classList.remove('is-active');
+    setTimeout(() => {
+      heart.classList.add('is-active');
+    }, 100);
 
-    console.log('ㅇㄴㅁ');
     // 좋아요 버튼 클릭 시 수행할 작업을 여기에 작성합니다.
   });
 
@@ -103,8 +108,4 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const allFeed = await apiService.fetchFeed();
   await createFeedCards($cardList, allFeed);
-
-  // 마크다운 변환
-  const $textPreview = $('#text_preview');
-  $('#text_preview').innerHTML = marked.parse($textPreview.innerText);
 });
