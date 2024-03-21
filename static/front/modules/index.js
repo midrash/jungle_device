@@ -5,9 +5,8 @@ import { cookie } from './Cookie.js';
 
 const handleClickCard = (e) => {
   e.stopPropagation();
-  console.log(e.target.className);
+
   if (e.target.id !== 'feed_detail') return;
-  if (e.target.className === 'like-btn') return;
 
   const { id } = e.target.dataset;
 
@@ -61,7 +60,6 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await createFeedCards($cardList, myFeed);
   });
-
   $('.watch-all-feed-btn').addEventListener('click', async () => {
     const allFeed = await apiService.fetchFeed();
 
@@ -70,7 +68,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     await createFeedCards($cardList, allFeed);
   });
-  $cardList.addEventListener('click', (e) => {
+  $cardList.addEventListener('click', async (e) => {
     e.stopPropagation();
 
     if (e.target.className !== 'like-btn') return;
@@ -81,6 +79,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }, 100);
 
     // 좋아요 버튼 클릭 시 수행할 작업을 여기에 작성합니다.
+    const postID = e.target.closest('#feed_detail').dataset.id;
+
+    await apiService.increaseLikeCount({ postID });
   });
 
   if (

@@ -4,7 +4,7 @@ import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, make_response
 from flask_cors import CORS, cross_origin
 
 
@@ -28,6 +28,8 @@ BASE_URL = "http://192.168.1.175:5000/"
 def home():
     # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    token = request.cookies.get("token")
+    print("토큰이에오")
     print(token)
     find_user = tokenVerification(token)
     print(find_user)
@@ -65,6 +67,7 @@ def feed_detail(number):
             name=db_result["user_name"],
             image=db_result["image"],
             detail=db_result["detail"],
+            product=db_result["product"],
         )
 
 
@@ -149,6 +152,7 @@ def feed_upload_proc():
     file = request.files["image"]
     input_data = request.form
     detail = input_data["detail"]
+    product = input_data["product"]
     # 파일 업로드
     file_path = uploade_file(file)
     if file_path == False:
@@ -161,6 +165,7 @@ def feed_upload_proc():
         "image": file_path,
         "groupbuy": False,
         "like": 0,
+        "product": product,
     }
     db.feeds.insert_one(feed)
     return jsonify({"result": "success", "message": "성공"})
@@ -213,26 +218,26 @@ def feed_delete_proc():
         return jsonify({"result": "fail", "message": "해당 유저의 피드 아님"})
 
 
-# ## 공구 모집
-# @app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
-# def feed_groupbuy_proc(arg):
-#     # 토큰 검증
-#     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-#     find_user = tokenVerification(token)
-#     if find_user == False:
-#         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+## 공구 모집
+@app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
+def feed_groupbuy_proc(arg):
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
-#     print(request.json)
-#     contact = request.json["contact"]
-#     link = request.json["link"]
-#     feed = {
-#         "groupbuy": True,
-#         "representative": find_user["user_name"],
-#         "contact": contact,
-#         "link": link,
-#     }
-#     db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
-#     return jsonify({"result": "success", "message": "성공"})
+    print(request.json)
+    contact = request.json["contact"]
+    link = request.json["link"]
+    feed = {
+        "groupbuy": True,
+        "representative": find_user["user_name"],
+        "contact": contact,
+        "link": link,
+    }
+    db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
+    return jsonify({"result": "success", "message": "성공"})
 
 
 ## 피드 조회
@@ -251,6 +256,7 @@ def read_feeds():
                 "detail": 1,
                 "image": 1,
                 "like": 1,
+                "product": 1,
             },
         )
     )
@@ -314,6 +320,7 @@ def read_my_feeds():
                 "detail": 1,
                 "image": 1,
                 "like": 1,
+                "product": 1,
             },
         )
     )

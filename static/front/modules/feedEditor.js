@@ -69,15 +69,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const $feedEditorForm = $('.feed-editor-form');
   const $uploadBtn = $('.feed-upload-btn');
 
-  console.log($uploadBtn);
-
   $uploadBtn.addEventListener('click', async (e) => {
     e.preventDefault();
     const [tokenCookie] = decodeURIComponent(document.cookie).split('; ');
     const [_, token] = tokenCookie.split('=');
     const formData = new FormData($feedEditorForm);
 
-    console.log(formData);
     try {
       const res = await fetch(`${BASE_URL}api/feed`, {
         method: 'POST',
