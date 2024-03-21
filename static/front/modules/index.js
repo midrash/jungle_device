@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     heart.classList.remove('is-active');
     setTimeout(() => {
       heart.classList.add('is-active');
-    }, 100);
+    }, 0);
 
     // 좋아요 버튼 클릭 시 수행할 작업을 여기에 작성합니다.
     const postID = e.target.closest('#feed_detail').dataset.id;
