@@ -1,0 +1,26 @@
+.like-btn {
+  display: inline-block;
+  position: absolute;
+  pointer-events: auto !important;
+
+  width: 50px;
+  height: 50px;
+
+  right: -8px;
+  bottom: -10px;
+
+  /* border: 1px solid #e1e4e8; */
+  border-radius: 100%;
+
+  cursor: pointer;
+  transition: all 0.3s;
+
+  z-index: 99;
+}
+
+.card-list > li > button > svg {
+  width: 40px;
+  height: 40px;
+
+  z-index: 999;
+}
