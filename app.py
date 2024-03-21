@@ -218,26 +218,26 @@ def feed_delete_proc():
         return jsonify({"result": "fail", "message": "해당 유저의 피드 아님"})
 
 
-# ## 공구 모집
-# @app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
-# def feed_groupbuy_proc(arg):
-#     # 토큰 검증
-#     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-#     find_user = tokenVerification(token)
-#     if find_user == False:
-#         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+## 공구 모집
+@app.route("/api/feed/groupbuy/<arg>", methods=["PUT"])
+def feed_groupbuy_proc(arg):
+    # 토큰 검증
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    find_user = tokenVerification(token)
+    if find_user == False:
+        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
-#     print(request.json)
-#     contact = request.json["contact"]
-#     link = request.json["link"]
-#     feed = {
-#         "groupbuy": True,
-#         "representative": find_user["user_name"],
-#         "contact": contact,
-#         "link": link,
-#     }
-#     db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
-#     return jsonify({"result": "success", "message": "성공"})
+    print(request.json)
+    contact = request.json["contact"]
+    link = request.json["link"]
+    feed = {
+        "groupbuy": True,
+        "representative": find_user["user_name"],
+        "contact": contact,
+        "link": link,
+    }
+    db.feeds.update_one({"_id": ObjectId(arg)}, {"$set": feed})
+    return jsonify({"result": "success", "message": "성공"})
 
 
 ## 피드 조회
