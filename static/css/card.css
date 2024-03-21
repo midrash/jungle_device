@@ -1,3 +1,27 @@
+.card-list h3 {
+  font-size: 20px;
+}
+
+.title-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 240px;
+
+  background-color: #e8f4ff;
+
+  margin: 4px 0;
+  padding: 3px 0;
+
+  border: 1px solid lightgray;
+  border-radius: 4px;
+}
+
+.title-wrapper span {
+  font-weight: 600;
+}
+
 .card-list > li * {
   pointer-events: none;
 }

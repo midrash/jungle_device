@@ -15,7 +15,7 @@ const handleClickCard = (e) => {
 
 const createFeedCards = async (target = $('.card-list'), feeds) => {
   const cardsHTML = feeds
-    .map(({ image, detail, _id, like }) => {
+    .map(({ image, detail, _id, like, product }) => {
       const detailHTML = marked.parse(detail);
 
       return `
@@ -31,6 +31,9 @@ const createFeedCards = async (target = $('.card-list'), feeds) => {
             src="${image}"
             alt="Image"
           />
+          <div class="title-wrapper">
+            <span>${product}</span>
+          </div>
           <div id="text_preview" class="markdown-body multi-ellipsis">${detailHTML}</div>
         </div>
       </li>
