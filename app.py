@@ -4,7 +4,7 @@ import datetime
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from werkzeug.utils import secure_filename
-from flask import Flask, render_template, jsonify, request, make_response
+from flask import Flask, render_template, jsonify, request
 from flask_cors import CORS, cross_origin
 
 
@@ -13,13 +13,10 @@ cors = CORS(app)
 app.config["CORS_HEADERS"] = "Content-Type"
 
 client = MongoClient("192.168.1.175", 27017)
-# client = MongoClient("localhost", 27017)
 db = client.jungle
 
 SECRET_KEY = "jungle"
 BASE_URL = "http://192.168.1.175:5000/"
-# BASE_URL = "http://localhost:5000/"
-
 # @app.route('/<name>')
 # def hello(name):
 #     return render_template('index.html', name=name)
@@ -31,8 +28,6 @@ BASE_URL = "http://192.168.1.175:5000/"
 def home():
     # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    token = request.cookies.get("token")
-    print("토큰이에오")
     print(token)
     find_user = tokenVerification(token)
     print(find_user)
@@ -56,25 +51,6 @@ def page_login():
     return render_template("loginPage.html", name="테스터")
 
 
-# # 피드 상세보기
-# @app.route("/feed/detail/<number>")
-# def feed_detail(number):
-#     token = request.cookies.get("token")
-#     print("토큰이에오")
-#     print(token)
-#     find_user = tokenVerification(token)
-#     db_result = db.feeds.find_one({"_id": ObjectId(number)})
-#     if db_result == None:
-#         return render_template("index.html", name=find_user["user_name"])
-#     else:
-#         db_result["_id"] = str(db_result["_id"])
-#         db_result["image"] = BASE_URL + db_result["image"]
-#         return render_template(
-#             "feedDetail.html",
-#             name=db_result["user_name"],
-#             image=db_result["image"],
-#             detail=db_result["detail"],
-#         )
 # 피드 상세보기
 @app.route("/feed/detail/<number>")
 def feed_detail(number):
@@ -95,11 +71,7 @@ def feed_detail(number):
 # 피드 작성
 @app.route("/feed/editor")
 def feed():
-    token = request.cookies.get("token")
-    print("토큰이에오")
-    print(token)
-    find_user = tokenVerification(token)
-    return render_template("feedEditor.html", name=find_user["user_name"])
+    return render_template("feedEditor.html", name="테스터")
 
 
 ## api
@@ -152,18 +124,6 @@ def login_proc():
         }
         # 토큰 생성
         token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-        # # 쿠키에 JWT 토큰 설정
-        # response = make_response(
-        #     jsonify(
-        #         {
-        #             "result": "success",
-        #             "user_name": find_user["user_name"],
-        #             "token": token,
-        #         }
-        #     )
-        # )
-        # response.set_cookie("token", token)
-        # return response
         return jsonify(
             {"result": "success", "user_name": find_user["user_name"], "token": token}
         )
@@ -176,12 +136,8 @@ def login_proc():
 @app.route("/api/feed", methods=["POST"])
 def feed_upload_proc():
     # # 토큰 검증
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    # print("token")
-    # print(token)
-    # find_user = tokenVerification(token)
-    token = request.cookies.get("token")
-    print("토큰이에오")
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    print("token")
     print(token)
     find_user = tokenVerification(token)
     if find_user == False:
@@ -240,11 +196,7 @@ def feed_upload_proc():
 @app.route("/api/feed", methods=["DELETE"])
 def feed_delete_proc():
     # 토큰 검증
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    # find_user = tokenVerification(token)
-    token = request.cookies.get("token")
-    print("토큰이에오")
-    print(token)
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     find_user = tokenVerification(token)
     if find_user == False:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
@@ -288,11 +240,7 @@ def feed_delete_proc():
 def read_feeds():
 
     # 토큰 검증
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    token = request.cookies.get("token")
-    print("토큰이에오")
-    print(token)
-    find_user = tokenVerification(token)
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = list(
         db.feeds.find(
             {},
@@ -312,6 +260,7 @@ def read_feeds():
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
+        find_user = tokenVerification(token)
         if find_user == False:
             return jsonify({"result": "success", "message": db_result})
         else:
@@ -329,17 +278,14 @@ def read_feeds():
 @app.route("/api/feed/detail/<arg>", methods=["GET"])
 def read_feed_detail(arg):
 
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    token = request.cookies.get("token")
-    print("토큰이에오")
-    print(token)
-    find_user = tokenVerification(token)
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     db_result = db.feeds.find_one({"_id": ObjectId(arg)})
     db_result["_id"] = str(db_result["_id"])
     db_result["image"] = BASE_URL + db_result["image"]
     if db_result == None:
         return jsonify({"result": "fail", "message": "피드 조회 실패"})
     else:
+        find_user = tokenVerification(token)
         if find_user["user_id"] == db_result["user_id"]:
             db_result["my"] = True
             return jsonify({"result": "success", "message": db_result})
@@ -352,11 +298,7 @@ def read_feed_detail(arg):
 def read_my_feeds():
 
     # 토큰 검증
-    # token = request.headers.get("Authorization")  # Authorization 헤더로 담음
-    # find_user = tokenVerification(token)
-    token = request.cookies.get("token")
-    print("토큰이에오")
-    print(token)
+    token = request.headers.get("Authorization")  # Authorization 헤더로 담음
     find_user = tokenVerification(token)
     if find_user == False:
         return jsonify({"result": "fail", "message": "토큰 검증 실패"})
@@ -514,43 +456,6 @@ def feed_like_proc():
     like = db_result["like"] + 1
     db.feeds.update_one({"_id": ObjectId(id)}, {"$set": {"like": like}})
     return jsonify({"result": "success", "message": "좋아요+1"})
-
-
-# 쿠키 테스트
-@app.route("/api/cookie/login", methods=["POST"])
-def cookieTest():
-    # 요청 내용 파싱
-    print(request.json)
-    user_id = request.json["user_id"]
-    user_password = request.json["user_password"]
-    # 가입 여부 확인
-    find_user = db.users.find_one({"user_id": user_id})
-    print(find_user)
-
-    # 미가입
-    if find_user == None:
-        print("미가입 아이디")
-        return jsonify({"result": "fail", "message": "미가입 아이디"})
-    # 아이디, 비밀번호가 일치하는 경우
-    elif (
-        find_user["user_id"] == user_id and find_user["user_password"] == user_password
-    ):
-        payload = {
-            "user_id": user_id,
-            # 'exp': datetime.utcnow() + timedelta(seconds=60)  # 로그인 24시간 유지
-        }
-        # 토큰 생성
-        token = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-        # 쿠키에 JWT 토큰 설정
-        response = make_response(
-            jsonify({"result": "success", "user_name": find_user["user_name"]})
-        )
-        response.set_cookie("token", token)
-        return response
-
-    # 아이디, 비밀번호가 일치하지 않는 경우
-    else:
-        return jsonify({"result": "fail", "message": "로그인 실패"})
 
 
 if __name__ == "__main__":
