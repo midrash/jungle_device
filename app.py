@@ -223,9 +223,12 @@ def feed_delete_proc():
 def feed_groupbuy_proc(arg):
     # 토큰 검증
     token = request.headers.get("Authorization")  # Authorization 헤더로 담음
+    token = request.cookies.get("token")
+    print("토큰이에오")
+    print(token)
     find_user = tokenVerification(token)
-    if find_user == False:
-        return jsonify({"result": "fail", "message": "토큰 검증 실패"})
+    # if find_user == False:
+    #     return jsonify({"result": "fail", "message": "토큰 검증 실패"})
 
     print(request.json)
     contact = request.json["contact"]
